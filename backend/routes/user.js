@@ -1,9 +1,13 @@
 import express from "express"
 import { signIn, signUp } from "../controller/auth.js"
+import { googleAuth } from "../controller/googleAuth.js";
+import { githubAuth } from "../controller/githubAuth.js";
 
 const router = express.Router()
 
 router.post("/signUp", signUp);
 router.post("/signIn", signIn);
+router.post("/google", googleAuth)
+router.post("/github", githubAuth)
 
 export default router;
