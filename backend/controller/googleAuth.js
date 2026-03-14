@@ -1,5 +1,5 @@
 import { OAuth2Client } from "google-auth-library"
-import User from "../middleware/auth.js"
+import User from "../model/userModel.js"
 import { generateToken } from "../config/token.js"
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
