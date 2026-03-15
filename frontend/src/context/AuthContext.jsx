@@ -4,7 +4,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react'
 const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [token, setToken] = useToken(localStorage.getItem("token") || null);
+    const [token, setToken] = useState(localStorage.getItem("token") || null);
 
     const login = () => {
         localStorage.setItem("token");
