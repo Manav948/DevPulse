@@ -1,10 +1,14 @@
 import axios from "axios"
 import User from "../model/userModel.js"
 import { generateToken } from "../config/token.js"
+
 export const githubAuth = async (req, res) => {
     try {
         const { code } = req.body;
 
+        if (!code) {
+            return res.status(400).json({ message: "GitHub code missing" });
+        }
         const tokenResponse = await axios.post(
             "https://github.com/login/oauth/access_token",
             {
@@ -18,12 +22,18 @@ export const githubAuth = async (req, res) => {
         )
 
         const accessToken = tokenResponse.data.access_token;
-
-        const userResponse = await axios.post(
+        if (!accessToken) {
+            return res.status(400).json({
+                message: "Failed to get GitHub access token"
+            });
+        }
+        const userResponse = await axios.get(
             "https://api.github.com/user",
             {
                 headers: {
-                    Authorization: `Bearer ${accessToken}`
+                    Authorization: `Bearer ${accessToken}`,
+                    Accept: "application/json",
+                    "User-Agent": "node.js"
                 }
             }
         );
