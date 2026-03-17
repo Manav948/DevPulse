@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import connectDB from "./config/db.js";
 import router from "./routes/user.js";
 import cors from 'cors'
+import monitorRouter from "./routes/monitor.js";
 
 dotenv.config();
 const app = express()
@@ -17,7 +18,7 @@ app.use(cors({
     credentials: true,
 }))
 app.use("/api/v1/auth",router)
-
+app.use("/api/v1/monitor",monitorRouter)
 
 app.get("/", (req, res) => {
     res.send("This is response form TRacker")

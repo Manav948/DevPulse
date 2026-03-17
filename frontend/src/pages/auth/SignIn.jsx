@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../lib/axios";
 import toast from "react-hot-toast";
-import { GoogleLogin} from "@react-oauth/google";
+import { GoogleLogin } from "@react-oauth/google";
 import { FaGithub } from "react-icons/fa";
 
 const SignIn = () => {
@@ -92,10 +92,9 @@ const SignIn = () => {
 
         <div className="relative flex items-center justify-center mb-4">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-700"></div>
           </div>
 
-          <div className="relative bg-[#18181b] px-4 text-sm text-gray-400">
+          <div className="relative  px-4 text-sm text-gray-400">
             Or continue with
           </div>
         </div>
@@ -132,6 +131,15 @@ const SignIn = () => {
           </button>
 
         </div>
+        <p className="text-gray-400 text-sm text-center">
+          You don't have an account?{" "}
+          <span
+            onClick={() => navigate("/signup")}
+            className="text-red-400 hover:text-red-300 cursor-pointer"
+          >
+            Sign Up
+          </span>
+        </p>
       </div>
     </div>
   );
