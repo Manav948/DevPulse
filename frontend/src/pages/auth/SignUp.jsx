@@ -33,7 +33,6 @@ const SignUp = () => {
       toast.success("Signup successful");
       navigate("/signin");
     } catch (error) {
-      console.log("Signup error:", error);
       toast.error("Signup failed");
     } finally {
       setLoading(false);
@@ -50,17 +49,25 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-linear-to-br from-black via-zinc-900 to-red-900 px-4">
-      <div className="w-full max-w-md bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-8 shadow-2xl">
-        <h2 className="text-3xl font-bold text-white text-center">
+    <div className="flex items-center justify-center min-h-screen 
+      bg-linear-to-br from-black via-[#020617] to-green-900 px-4">
+
+      <div className="w-full max-w-md bg-white/10 backdrop-blur-xl border border-green-500/10 
+        rounded-2xl p-8 shadow-[0_0_60px_rgba(34,197,94,0.12)] relative overflow-hidden">
+
+        <div className="absolute inset-0 
+          bg-linear-to-r from-green-500/20 via-emerald-400/10 to-transparent 
+          blur-3xl opacity-40" />
+
+        <h2 className="text-3xl font-bold text-white text-center relative z-10">
           Create Account
         </h2>
 
-        <p className="text-gray-400 text-center mt-2 mb-6">
-          Start your coding journey
+        <p className="text-gray-400 text-center mt-2 mb-6 relative z-10">
+          Start monitoring your services
         </p>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="relative z-10">
 
           <input
             type="text"
@@ -68,7 +75,9 @@ const SignUp = () => {
             placeholder="Username"
             onChange={handleChange}
             required
-            className="w-full mb-4 px-4 py-3 rounded-lg bg-black/40 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full mb-4 px-4 py-3 rounded-lg bg-[#020617]/60 border border-green-500/10 
+              text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500/50 
+              focus:border-green-400/30 transition"
           />
 
           <input
@@ -77,7 +86,9 @@ const SignUp = () => {
             placeholder="Email"
             onChange={handleChange}
             required
-            className="w-full mb-4 px-4 py-3 rounded-lg bg-black/40 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full mb-4 px-4 py-3 rounded-lg bg-[#020617]/60 border border-green-500/10 
+              text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500/50 
+              focus:border-green-400/30 transition"
           />
 
           <input
@@ -86,13 +97,17 @@ const SignUp = () => {
             placeholder="Password"
             onChange={handleChange}
             required
-            className="w-full mb-6 px-4 py-3 rounded-lg bg-black/40 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full mb-6 px-4 py-3 rounded-lg bg-[#020617]/60 border border-green-500/10
+              text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500/50 
+              focus:border-green-400/30 transition"
           />
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 rounded-lg bg-linear-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 transition flex items-center justify-center font-semibold text-white mb-4"
+            className="w-full py-3 rounded-lg bg-linear-to-r from-green-500 to-emerald-600 
+              hover:from-green-600 hover:to-emerald-700 transition flex items-center justify-center 
+              font-semibold text-white mb-4 shadow-[0_0_20px_rgba(34,197,94,0.25)]"
           >
             {loading ? (
               <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -100,56 +115,54 @@ const SignUp = () => {
               "Create Account"
             )}
           </button>
-
         </form>
 
-        <div className="relative flex items-center justify-center mb-4">
-          <div className="absolute inset-0 flex items-center">
-          </div>
-
-          <div className="relative px-4 text-sm text-gray-400">
+        <div className="relative flex items-center justify-center mb-4 z-10">
+          <span className=" px-4 text-sm text-gray-500 relative">
             Or continue with
-          </div>
+          </span>
         </div>
 
-        <div className="flex space-x-2 space-y-1 mb-6 gap-5">
+        <div className="flex gap-4 mb-6 relative z-10">
 
-          <GoogleLogin
-            onSuccess={async (credentialResponse) => {
-              try {
-                const res = await api.post("/api/v1/auth/google", {
-                  token: credentialResponse.credential,
-                });
+          <div className="flex-1">
+            <GoogleLogin
+              onSuccess={async (credentialResponse) => {
+                try {
+                  const res = await api.post("/api/v1/auth/google", {
+                    token: credentialResponse.credential,
+                  });
 
-                login(res.data);
-                toast.success("Google login successful");
-                navigate("/dashboard");
+                  login(res.data);
+                  toast.success("Google login successful");
+                  navigate("/dashboard");
 
-              } catch (error) {
-                console.log("Google auth error:", error);
-                toast.error("Google login failed");
-              }
-            }}
-
-            onError={() => {
-              toast.error("Google login failed");
-            }}
-          />
+                } catch (error) {
+                  toast.error("Google login failed");
+                }
+              }}
+              onError={() => toast.error("Google login failed")}
+            />
+          </div>
 
           <button
             onClick={handleGithubLogin}
-            className="w-full rounded-lg bg-white text-black hover:bg-white/80 transition flex items-center justify-center  border border-white/10 cursor-pointer"
+            className="flex-1 py-2 rounded-lg 
+              bg-[#020617]/60 text-gray-200 
+              hover:bg-[#020617]/80 transition 
+              flex items-center justify-center gap-2 
+              border border-green-500/10"
           >
-            <FaGithub className="mr-2" /> GitHub
+            <FaGithub /> GitHub
           </button>
 
         </div>
-
-        <p className="text-gray-400 text-sm text-center">
+        
+        <p className="text-gray-400 text-sm text-center relative z-10">
           Already have an account?{" "}
           <span
             onClick={() => navigate("/signin")}
-            className="text-red-400 hover:text-red-300 cursor-pointer"
+            className="text-green-400 hover:text-green-300 cursor-pointer"
           >
             Sign In
           </span>
