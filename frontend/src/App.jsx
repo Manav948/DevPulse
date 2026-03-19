@@ -3,6 +3,7 @@ import SignUp from "./pages/auth/SignUp"
 import SignIn from "./pages/auth/SignIn"
 import GithubCallback from "./pages/auth/GithubCallback"
 import Dashboard from "./pages/dashboard/Dashboard"
+import AddMonitor from "./pages/AddMonitor/AddMonitor"
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn/>} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/add" element={<AddMonitor />} />
         <Route path="/github/callback" element={<GithubCallback />} />
       </Routes>
     </BrowserRouter>
