@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 const Dashboard = () => {
   const [monitors, setMonitors] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [open , setOpen] = useState(false);
 
   useEffect(() => {
     const fetchMonitor = async () => {
@@ -48,7 +47,7 @@ const Dashboard = () => {
           <button
             onClick={() => navigate("/add")}
             className="bg-green-500/80
-            px-5 py-2 rounded-xl font-medium shadow-lg hover:opacity-90 transition">
+            px-5 py-2 rounded-xl font-medium shadow-lg hover:opacity-90 transition cursor-pointer">
             + Add Monitor
           </button>
         </div>
@@ -62,7 +61,9 @@ const Dashboard = () => {
             <p className="text-gray-400 mb-4">
               No monitors found
             </p>
-            <button className="bg-blue-600 px-4 py-2 rounded-lg">
+            <button 
+            onClick={() => navigate("/add")}
+            className="bg-green-600 px-4 py-2 rounded-lg cursor-pointer">
               Create your first monitor
             </button>
           </div>
