@@ -28,6 +28,10 @@ const Dashboard = () => {
   const upCount = monitors.filter(m => m.lastStatus === "UP").length;
   const downCount = monitors.filter(m => m.lastStatus === "DOWN").length;
 
+  const handleDelete = (id) => {
+    setMonitors((prev) => prev.filter((m) => m._id !== id))
+  }
+
   return (
     <div className="bg-black min-h-screen text-white">
       <Header />
@@ -71,7 +75,7 @@ const Dashboard = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
             {monitors.map((monitor) => (
-              <MonitorCard key={monitor._id} monitor={monitor} />
+              <MonitorCard key={monitor._id} monitor={monitor} onDelete={handleDelete} />
             ))}
 
           </div>
