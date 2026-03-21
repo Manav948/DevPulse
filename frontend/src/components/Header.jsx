@@ -31,14 +31,14 @@ const Header = () => {
 
     return (
         <div className="w-full flex justify-center pt-6">
-            <header className="w-[82%] h-16 px-6 flex items-center justify-between 
+            <header className="w-[75%] h-16 px-6 flex items-center justify-between 
                 rounded-2xl border border-green-500/30 bg-black backdrop-blur-xl 
-                shadow-[0_0_30px_rgba(34,197,94,0.1)] relative overflow-visible">
+                shadow-[0_0_30px_rgba(34,197,94,0.1)] relative overflow-visible z-50">
 
                 <div className="flex items-center gap-3 z-10">
                     <h1 className="text-xl font-bold bg-linear-to-r from-green-400 to-emerald-500 
                         bg-clip-text text-transparent">
-                        CodeMonitor
+                        DevPulse
                     </h1>
 
                     <div className="flex items-center gap-2 text-xs text-green-400 relative">
@@ -59,7 +59,7 @@ const Header = () => {
                     </div>
 
                     {open && (
-                        <div className="absolute right-0 top-14 w-56  rounded-xl border border-green-500/10 bg-black backdrop-blur-xl shadow-[0_0_25px_rgba(34,197,94,0.15)] p-2">
+                        <div className="absolute right-0 top-14 w-56  rounded-xl border border-green-500/10 bg-black backdrop-blur-xl shadow-[0_0_25px_rgba(34,197,94,0.15)] p-2 z-50">
 
                             <div className="px-3 py-2">
                                 <UserAvatar user={user} size="sm" showInfo />
