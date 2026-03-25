@@ -4,6 +4,7 @@ import SignIn from "./pages/auth/SignIn"
 import GithubCallback from "./pages/auth/GithubCallback"
 import Dashboard from "./pages/dashboard/Dashboard"
 import AddMonitor from "./pages/AddMonitor/AddMonitor"
+import Settings from "./pages/settings/Settings"
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/add" element={<AddMonitor />} />
         <Route path="/github/callback" element={<GithubCallback />} />
+        <Route path="/profile" element={<Settings />} />
       </Routes>
     </BrowserRouter>
   )

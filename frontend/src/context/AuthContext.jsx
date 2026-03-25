@@ -22,6 +22,12 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
         setToken(null);
     }
+
+    const updateUser = (updatedUser) => {
+        setUser(updatedUser);
+        localStorage.setItem("user", JSON.stringify(updatedUser));
+    };
+
     useEffect(() => {
         if (user) {
             localStorage.setItem("user", JSON.stringify(user))
@@ -34,6 +40,7 @@ export const AuthProvider = ({ children }) => {
                 token,
                 login,
                 logout,
+                updateUser,
                 isAuthenticated: !!token
             }}
         >

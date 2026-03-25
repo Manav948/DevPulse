@@ -11,6 +11,5 @@ router.post("/signUp", signUp);
 router.post("/signIn", signIn);
 router.post("/google", googleAuth)
 router.post("/github", githubAuth)
-router.put("/profile", isAuth, updateProfile)
 
 export default router;

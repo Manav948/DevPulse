@@ -6,6 +6,7 @@ import router from "./routes/user.js";
 import cors from 'cors'
 import monitorRouter from "./routes/monitor.js";
 import { startMonitor } from "./controller/MonitorController.js";
+import settigsRouter from "./routes/profile.js";
 
 dotenv.config();
 const app = express()
@@ -18,8 +19,9 @@ app.use(cors({
     origin: process.env.FRONTEND_URL || ["http://localhost:5173", "https://imagino-dun.vercel.app"],
     credentials: true,
 }))
-app.use("/api/v1/auth",router)
-app.use("/api/v1/monitor",monitorRouter)
+app.use("/api/v1/auth", router)
+app.use("/api/v1/monitor", monitorRouter)
+app.use("/api/v1/users", settigsRouter)
 
 startMonitor();
 app.get("/", (req, res) => {

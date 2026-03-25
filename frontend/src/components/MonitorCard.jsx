@@ -107,7 +107,7 @@ const MonitorCard = ({ monitor, onDelete }) => {
                 </h2>
             </div>
 
-            <div className="h-24 mb-4">
+            <div className="h-24 mb-4" style={{ minHeight: "96px" }}>
                 <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={data}>
                         <Area

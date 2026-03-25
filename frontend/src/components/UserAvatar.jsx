@@ -1,11 +1,21 @@
-import React from 'react'
+import { useState, useEffect } from "react";
 
 const UserAvatar = ({ user, size = "md", showInfo = false }) => {
+    const [imageUrl, setImageUrl] = useState(null);
+
     const sizeClasses = {
         sm: "w-8 h-8 text-sm",
         md: "w-10 h-10 text-base",
         lg: "w-14 h-14 text-lg",
     };
+
+    useEffect(() => {
+        if (user?.profileImage) {
+            // cache buster
+            setImageUrl(`${user.profileImage}?t=${Date.now()}`);
+        }
+    }, [user?.profileImage]);
+
     const initial = (
         user?.username?.charAt(0) ||
         user?.name?.charAt(0) ||
@@ -14,18 +24,16 @@ const UserAvatar = ({ user, size = "md", showInfo = false }) => {
 
     return (
         <div className="flex items-center gap-3">
-
             <div
                 className={`${sizeClasses[size]} rounded-full 
                 bg-linear-to-br from-green-500 to-emerald-600 
                 flex items-center justify-center 
                 text-white font-semibold 
-                shadow-[0_0_10px_rgba(34,197,94,0.4)] 
                 overflow-hidden`}
             >
-                {user?.profileImage ? (
+                {imageUrl ? (
                     <img
-                        src={user.profileImage}
+                        src={imageUrl}
                         alt="profile"
                         className="w-full h-full object-cover"
                     />
@@ -50,5 +58,4 @@ const UserAvatar = ({ user, size = "md", showInfo = false }) => {
     );
 };
 
-
-export default UserAvatar
+export default UserAvatar;
