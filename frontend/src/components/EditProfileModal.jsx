@@ -1,8 +1,9 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import Cropper from "react-easy-crop";
 import api from "../lib/axios";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { X } from "lucide-react";
 
 const EditProfileModal = ({ open, setOpen, user, refreshUser }) => {
   const [imageSrc, setImageSrc] = useState(null);
@@ -10,6 +11,8 @@ const EditProfileModal = ({ open, setOpen, user, refreshUser }) => {
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const modalRef = useRef();
 
   const onCropComplete = useCallback((_, croppedPixels) => {
     setCroppedAreaPixels(croppedPixels);
@@ -26,7 +29,13 @@ const EditProfileModal = ({ open, setOpen, user, refreshUser }) => {
     };
   };
 
-  // Helper: convert base64 data URL → Blob
+  const handleOutsideClick = (e) => {
+    if (modalRef.current && !modalRef.current.contains(e.target)) {
+      setOpen(false);
+      setImageSrc(null);
+    }
+  };
+
   const dataURLtoBlob = (dataURL) => {
     const [header, data] = dataURL.split(",");
     const mime = header.match(/:(.*?);/)[1];
@@ -43,9 +52,6 @@ const EditProfileModal = ({ open, setOpen, user, refreshUser }) => {
       const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
       const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
 
-      if (!cloudName || !uploadPreset) {
-        throw new Error("Cloudinary credentials are not configured in .env");
-      }
       const blob = dataURLtoBlob(imageSrc);
       const formData = new FormData();
       formData.append("file", blob, "avatar.jpg");
@@ -57,17 +63,20 @@ const EditProfileModal = ({ open, setOpen, user, refreshUser }) => {
       );
 
       const imageUrl = uploadRes.data.secure_url;
+
       await api.put("/api/v1/users/profile", {
         profileImage: imageUrl,
       });
 
-      refreshUser();
+      await refreshUser();
+
+      toast.success("Profile updated successfully");
       setOpen(false);
       setImageSrc(null);
-      toast.success("Profile update successfully")
+
     } catch (error) {
-      console.error("Profile save failed:", error.message || error);
-      toast.error("Profile not update successfully")
+      console.error(error);
+      toast.error("Profile not updated");
     } finally {
       setLoading(false);
     }
@@ -76,30 +85,60 @@ const EditProfileModal = ({ open, setOpen, user, refreshUser }) => {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4">
-      <div className="bg-black border border-white/10 p-6 rounded-xl w-full max-w-md">
+    <div
+      className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50"
+      onMouseDown={handleOutsideClick}
+    >
 
-        <h2 className="text-xl mb-4 text-white">
+      <div
+        ref={modalRef}
+        className="bg-black border border-white/10 p-6 rounded-xl w-full max-w-md relative"
+      >
+        <button
+          onClick={() => setOpen(false)}
+          className="absolute top-3 right-3 text-gray-400 hover:text-white"
+        >
+          <X size={20} />
+        </button>
+
+        <h2 className="text-xl mb-4 text-white text-center">
           Edit Profile Picture
         </h2>
 
         {!imageSrc && (
-          <input type="file" accept="image/*" onChange={handleImageChange} />
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="text-white w-full"
+          />
         )}
 
         {imageSrc && (
-          <div className="relative w-full h-64">
-            <Cropper
-              image={imageSrc}
-              crop={crop}
-              zoom={zoom}
-              aspect={1}
-              cropShape="round"
-              onCropChange={setCrop}
-              onZoomChange={setZoom}
-              onCropComplete={onCropComplete}
+          <>
+            <div className="relative w-full h-56 sm:h-64">
+              <Cropper
+                image={imageSrc}
+                crop={crop}
+                zoom={zoom}
+                aspect={1}
+                cropShape="round"
+                onCropChange={setCrop}
+                onZoomChange={setZoom}
+                onCropComplete={onCropComplete}
+              />
+            </div>
+
+            <input
+              type="range"
+              min={1}
+              max={3}
+              step={0.1}
+              value={zoom}
+              onChange={(e) => setZoom(e.target.value)}
+              className="w-full mt-4"
             />
-          </div>
+          </>
         )}
 
         {imageSrc && (

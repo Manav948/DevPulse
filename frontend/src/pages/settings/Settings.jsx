@@ -3,11 +3,14 @@ import api from "../../lib/axios";
 import UserAvatar from "../../components/UserAvatar";
 import EditProfileModal from "../../components/EditProfileModal";
 import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 
 const Settings = () => {
     const { user, updateUser } = useAuth();
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     const fetchUser = async () => {
         try {
@@ -36,11 +39,20 @@ const Settings = () => {
         <div className="bg-black text-white min-h-screen pt-24">
             <div className="max-w-4xl mx-auto px-4 space-y-6">
 
-                <div>
-                    <h1 className="text-2xl sm:text-3xl font-semibold">Account</h1>
-                    <p className="text-gray-400 text-sm mt-1">
-                        Manage your account settings and profile information.
-                    </p>
+                <div className="flex items-start justify-between">
+                    <div>
+                        <h1 className="text-2xl sm:text-3xl font-semibold">Account</h1>
+                        <p className="text-gray-400 text-sm mt-1">
+                            Manage your account settings and profile information.
+                        </p>
+                    </div>
+
+                    <button
+                        onClick={() => navigate("/dashboard")}
+                        className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition"
+                    >
+                        <ArrowLeft size={18} />
+                    </button>
                 </div>
                 <div className="border border-white/10 rounded-2xl bg-white/5 backdrop-blur">
                     <div className="p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
