@@ -5,11 +5,13 @@ import GithubCallback from "./pages/auth/GithubCallback"
 import Dashboard from "./pages/dashboard/Dashboard"
 import AddMonitor from "./pages/AddMonitor/AddMonitor"
 import Settings from "./pages/settings/Settings"
+import Home from "./pages/Home/Home"
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<Home />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn/>} />
         <Route path="/dashboard" element={<Dashboard />} />
