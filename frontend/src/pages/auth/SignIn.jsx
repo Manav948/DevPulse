@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../lib/axios";
 import toast from "react-hot-toast";
@@ -15,6 +15,8 @@ const SignIn = () => {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/dashboard";
 
   const handleChange = (e) => {
     setForm({
@@ -31,7 +33,7 @@ const SignIn = () => {
       login(res.data);
 
       toast.success("SignIn successful");
-      navigate("/dashboard");
+      navigate(from, { replace: true });
     } catch (error) {
       console.log("SignIn error:", error);
       toast.error("SignIn failed");
@@ -122,7 +124,7 @@ const SignIn = () => {
 
                   login(res.data);
                   toast.success("Google login successful");
-                  navigate("/dashboard");
+                  navigate(from, { replace: true });
 
                 } catch (error) {
                   toast.error("Google login failed");
