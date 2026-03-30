@@ -4,6 +4,7 @@ import Footer from './Footer'
 import Hero from './Hero'
 import HowItWorks from './HowItWork'
 import InfiniteSlider from './InfiniteSlider'
+import Features from './UpComing'
 
 const Home = () => {
   return (
@@ -14,10 +15,11 @@ const Home = () => {
         <InfiniteSlider />
         <CardSection />
         <HowItWorks />
+        <Features />
       </div>
       <Footer/>
     </div>
   )
 }
 
-export default Home
+export default Home
