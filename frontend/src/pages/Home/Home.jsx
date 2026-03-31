@@ -22,7 +22,7 @@ const Home = () => {
   const rafRef = useRef(null);
 
   useEffect(() => {
-    // ── Lenis smooth scroll scoped to the Home wrapper ──
+    // Lenis smooth scroll scoped to the Home wrapper ──
     const lenis = new Lenis({
       wrapper: wrapperRef.current,
       content: wrapperRef.current,
@@ -52,7 +52,7 @@ const Home = () => {
     };
 
     const ctx = gsap.context(() => {
-      // ── Infinite Slider section ──
+      //  Infinite Slider section
       if (sliderRef.current) {
         gsap.fromTo(
           sliderRef.current,
@@ -64,7 +64,7 @@ const Home = () => {
         );
       }
 
-      // ── Card / Video section — slide in from sides ──
+      // Card / Video section — slide in from sides 
       if (cardRef.current) {
         const img = cardRef.current.querySelector("[data-anim='img']");
         const txt = cardRef.current.querySelector("[data-anim='txt']");
@@ -85,11 +85,10 @@ const Home = () => {
         }
       }
 
-      // ── How It Works cards stagger ──
       if (howItRef.current) {
         const cards = howItRef.current.querySelectorAll(".hiw-card");
         if (cards.length) {
-          // Reset the CSS-only class (IntersectionObserver version) so GSAP takes over
+
           cards.forEach((c) => {
             c.style.opacity = "0";
             c.style.transform = "translateY(40px)";
@@ -107,7 +106,6 @@ const Home = () => {
         }
       }
 
-      // ── Features / Coming Soon cards stagger ──
       if (featuresRef.current) {
         const items = featuresRef.current.querySelectorAll(".future-card");
         if (items.length) {
@@ -121,7 +119,6 @@ const Home = () => {
         }
       }
 
-      // ── Footer fade in ──
       if (footerRef.current) {
         gsap.fromTo(footerRef.current,
           { opacity: 0, y: 30 },
@@ -151,7 +148,6 @@ const Home = () => {
       <Header />
 
       <div>
-        {/* Hero has its own GSAP entrance anims — no wrapper needed */}
         <Hero />
 
         <div ref={sliderRef}>
