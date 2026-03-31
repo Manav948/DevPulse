@@ -1,6 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
+import { useRef } from "react";
 
 const upgrades = [
     {
@@ -37,20 +36,6 @@ const upgrades = [
 
 const FutureSection = () => {
     const sectionRef = useRef(null);
-
-    useEffect(() => {
-        gsap.fromTo(
-            sectionRef.current.querySelectorAll(".future-card"),
-            { opacity: 0, y: 60 },
-            {
-                opacity: 1,
-                y: 0,
-                duration: 1,
-                stagger: 0.15,
-                ease: "power3.out",
-            }
-        );
-    }, []);
 
     return (
         <section className="bg-black text-white py-28 px-6" ref={sectionRef}>

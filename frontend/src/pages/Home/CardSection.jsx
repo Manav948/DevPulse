@@ -8,19 +8,6 @@ const CardSection = () => {
     const glowRef = useRef(null);
 
     useEffect(() => {
-        const tl = gsap.timeline();
-
-        tl.fromTo(
-            imageRef.current,
-            { x: -100, opacity: 0 },
-            { x: 0, opacity: 1, duration: 1.2, ease: "power3.out" }
-        ).fromTo(
-            textRef.current,
-            { x: 100, opacity: 0 },
-            { x: 0, opacity: 1, duration: 1.2, ease: "power3.out" },
-            "-=0.8"
-        );
-
         // Floating image animation
         gsap.to(imageRef.current, {
             y: -15,
@@ -60,7 +47,7 @@ const CardSection = () => {
             <div className="relative max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center">
 
                 {/* Image */}
-                <div ref={imageRef} className="relative group">
+                <div ref={imageRef} data-anim="img" className="relative group">
                     <div className="rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
                         <video
                             src="/Video1.mp4"
@@ -75,7 +62,7 @@ const CardSection = () => {
                 <div className="absolute inset-0 rounded-2xl border border-emerald-500/20 pointer-events-none"></div>
             </div>
 
-            <div ref={textRef}>
+            <div ref={textRef} data-anim="txt">
                 <h2 className="text-3xl md:text-4xl font-bold mb-4">
                     Monitor APIs in Real-Time
                 </h2>
