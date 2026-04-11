@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
-    origin: process.env.FRONTEND_URL || ["http://localhost:5173", "https://imagino-dun.vercel.app"],
+    origin: process.env.FRONTEND_URL || ["http://localhost:5173", "https://dev-pulse-pi.vercel.app"],
     credentials: true,
 }))
 app.use("/api/v1/auth", router)
