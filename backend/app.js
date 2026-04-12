@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cookieParser())
 
-const defaultOrigins = ["http://localhost:5173", "https://dev-pulse-pi.vercel.app"]
+const defaultOrigins = ["http://localhost:5173", "https://devpulse.manavvalani.in"]
 const frontendOrigin = process.env.FRONTEND_URL?.replace(/\/$/, "")
 const allowedOrigins = frontendOrigin ? [...new Set([...defaultOrigins, frontendOrigin])] : defaultOrigins
 
