@@ -15,10 +15,20 @@ const PORT = process.env.PORT || 5000
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cookieParser())
+
+const defaultOrigins = ["http://localhost:5173", "https://dev-pulse-pi.vercel.app"]
+const frontendOrigin = process.env.FRONTEND_URL?.replace(/\/$/, "")
+const allowedOrigins = frontendOrigin ? [...new Set([...defaultOrigins, frontendOrigin])] : defaultOrigins
+
 app.use(cors({
-    origin: process.env.FRONTEND_URL || ["http://localhost:5173", "https://dev-pulse-pi.vercel.app"],
+    origin: (origin, callback) => {
+        if (!origin) return callback(null, true)
+        if (allowedOrigins.includes(origin)) return callback(null, true)
+        callback(new Error(`CORS policy violation: origin ${origin} not allowed`))
+    },
     credentials: true,
 }))
+
 app.use("/api/v1/auth", router)
 app.use("/api/v1/monitor", monitorRouter)
 app.use("/api/v1/users", settigsRouter)
