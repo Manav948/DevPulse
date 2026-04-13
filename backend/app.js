@@ -7,9 +7,14 @@ import cors from 'cors'
 import monitorRouter from "./routes/monitor.js";
 import { startMonitor } from "./controller/MonitorController.js";
 import settigsRouter from "./routes/profile.js";
+import path from "path";
+import { fileURLToPath } from "url";
 
 dotenv.config();
 const app = express()
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const frontendDistPath = path.join(__dirname, "../frontend/dist")
 
 const PORT = process.env.PORT || 5000
 app.use(express.urlencoded({ extended: true }))
@@ -33,10 +38,17 @@ app.use("/api/v1/auth", router)
 app.use("/api/v1/monitor", monitorRouter)
 app.use("/api/v1/users", settigsRouter)
 
-startMonitor();
-app.get("/", (req, res) => {
-    res.send("This is response form TRacker")
+app.use(express.static(frontendDistPath))
+
+// Serve React app for all non-API routes, including OAuth callback paths.
+app.get("/*", (req, res, next) => {
+    if (req.path.startsWith("/api/")) {
+        return next()
+    }
+    res.sendFile(path.join(frontendDistPath, "index.html"))
 })
+
+startMonitor();
 
 connectDB().then(() => {
     app.listen(PORT, () => {
