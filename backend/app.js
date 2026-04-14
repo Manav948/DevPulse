@@ -40,11 +40,13 @@ app.use("/api/v1/users", settigsRouter)
 
 app.use(express.static(frontendDistPath))
 
-// Serve React app for all non-API routes, including OAuth callback paths.
-app.get("/*", (req, res, next) => {
-    if (req.path.startsWith("/api/")) {
-        return next()
-    }
+// Explicitly handle OAuth callback routes to avoid 404s on refresh/direct hit.
+app.get(["/github/callback", "/google/callback"], (req, res) => {
+    res.sendFile(path.join(frontendDistPath, "index.html"))
+})
+
+// Serve React app for all non-API routes.
+app.get(/^\/(?!api\/).*/, (req, res) => {
     res.sendFile(path.join(frontendDistPath, "index.html"))
 })
 
