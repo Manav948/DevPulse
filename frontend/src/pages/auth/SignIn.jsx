@@ -134,7 +134,7 @@ const SignIn = () => {
             />
           </div>
 
-          <button
+          {/* <button
             onClick={handleGithubLogin}
             className="flex-1 py-2 rounded-lg 
               bg-white/10 text-white 
@@ -143,7 +143,7 @@ const SignIn = () => {
               border border-white/10"
           >
             <FaGithub /> GitHub
-          </button>
+          </button> */}
 
         </div>
 

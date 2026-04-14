@@ -145,7 +145,7 @@ const SignUp = () => {
             />
           </div>
 
-          <button
+          {/* <button
             onClick={handleGithubLogin}
             className="flex-1 py-2 rounded-lg 
               bg-[#020617]/60 text-gray-200 
@@ -154,7 +154,7 @@ const SignUp = () => {
               border border-green-500/10"
           >
             <FaGithub /> GitHub
-          </button>
+          </button> */}
 
         </div>
         
