@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Use environment variable for backend URL, fallback to localhost for development
-const BASE_URL =
+export const BASE_URL =
   import.meta.env.VITE_API_URL ||
   (import.meta.env.MODE === "development"
     ? "http://localhost:3000"

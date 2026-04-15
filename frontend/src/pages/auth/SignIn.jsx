@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import api from "../../lib/axios";
+import api, { BASE_URL } from "../../lib/axios";
 import toast from "react-hot-toast";
 import { GoogleLogin } from "@react-oauth/google";
 import { FaGithub } from "react-icons/fa";
@@ -17,6 +17,24 @@ const SignIn = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/dashboard";
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const oauthToken = queryParams.get("oauthToken");
+    const oauthError = queryParams.get("oauthError");
+
+    if (oauthToken) {
+      login({ token: oauthToken });
+      toast.success("GitHub login successful");
+      navigate(from, { replace: true });
+      return;
+    }
+
+    if (oauthError) {
+      toast.error("GitHub authentication failed");
+      navigate("/signin", { replace: true });
+    }
+  }, [from, location.search, login, navigate]);
 
   const handleChange = (e) => {
     setForm({
@@ -44,8 +62,10 @@ const SignIn = () => {
 
   const handleGithubLogin = () => {
     const clientId = import.meta.env.VITE_GITHUB_CLIENT_ID;
-    const redirectUri = `${window.location.origin}/github/callback`;
-    const githubURL = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=user:email`;
+    const redirectUri = `${BASE_URL}/api/v1/auth/github/callback`;
+    const githubURL = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
+      redirectUri
+    )}&scope=user:email`;
     window.location.href = githubURL;
   };
 
@@ -134,7 +154,7 @@ const SignIn = () => {
             />
           </div>
 
-          {/* <button
+          <button
             onClick={handleGithubLogin}
             className="flex-1 py-2 rounded-lg 
               bg-white/10 text-white 
@@ -143,7 +163,7 @@ const SignIn = () => {
               border border-white/10"
           >
             <FaGithub /> GitHub
-          </button> */}
+          </button>
 
         </div>
 

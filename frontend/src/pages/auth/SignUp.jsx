@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import api from "../../lib/axios";
+import api, { BASE_URL } from "../../lib/axios";
 import toast from "react-hot-toast";
 import { GoogleLogin } from "@react-oauth/google";
 import { FaGithub } from "react-icons/fa";
@@ -41,9 +41,11 @@ const SignUp = () => {
 
   const handleGithubLogin = () => {
     const clientId = import.meta.env.VITE_GITHUB_CLIENT_ID;
-    const redirectUri = `${window.location.origin}/github/callback`;
+    const redirectUri = `${BASE_URL}/api/v1/auth/github/callback`;
 
-    const githubURL = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=user:email`;
+    const githubURL = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
+      redirectUri
+    )}&scope=user:email`;
 
     window.location.href = githubURL;
   };
@@ -145,7 +147,7 @@ const SignUp = () => {
             />
           </div>
 
-          {/* <button
+          <button
             onClick={handleGithubLogin}
             className="flex-1 py-2 rounded-lg 
               bg-[#020617]/60 text-gray-200 
@@ -154,7 +156,7 @@ const SignUp = () => {
               border border-green-500/10"
           >
             <FaGithub /> GitHub
-          </button> */}
+          </button>
 
         </div>
         
