@@ -94,6 +94,7 @@ const SignIn = () => {
             type="email"
             name="email"
             placeholder="Email"
+            autoComplete="email"
             onChange={handleChange}
             required
             className="w-full mb-4 px-4 py-3 rounded-lg bg-white/5 border border-white/10 
@@ -105,6 +106,7 @@ const SignIn = () => {
             type="password"
             name="password"
             placeholder="Password"
+            autoComplete="current-password"
             onChange={handleChange}
             required
             className="w-full mb-6 px-4 py-3 rounded-lg bg-white/5 border border-white/10 

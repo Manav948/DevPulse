@@ -50,6 +50,10 @@ app.get(/^\/(?!api\/).*/, (req, res) => {
     res.sendFile(path.join(frontendDistPath, "index.html"))
 })
 
+app.get("/", (req, res) => {
+    res.send("Welcome to DevPulse API");
+})
+
 startMonitor();
 
 connectDB().then(() => {
