@@ -7,7 +7,7 @@ export const isAuth = (req, res, next) => {
             token = req.headers.authorization.split(" ")[1];
         }
 
-        if (!token && !req.cookies?.accessToken) {
+        if (!token && req.cookies?.accessToken) {
             token = req.cookies.accessToken;
         }
         if (!token) {
@@ -19,7 +19,7 @@ export const isAuth = (req, res, next) => {
             return res.status(401).json({ message: "Invalid token type" });
         }
         req.user = {
-            id : decoded.id,
+            id : decoded.userId,
             email : decoded.email,
             role : decoded.role
         }

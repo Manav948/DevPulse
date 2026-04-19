@@ -43,6 +43,10 @@ const userSchema = mongoose.Schema({
         enum: ["user", "admin"],
         default: "user"
     },
+    refreshToken: {
+        type: String,
+        select: false
+    },
     lastLogin: {
         type: Date
     }

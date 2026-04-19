@@ -1,6 +1,6 @@
 import { OAuth2Client } from "google-auth-library"
 import User from "../model/userModel.js"
-import { generateToken } from "../config/token.js"
+import { generateRefreshToken, generateAcessToken } from "../config/token.js"
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 export const googleAuth = async (req, res) => {
@@ -22,13 +22,25 @@ export const googleAuth = async (req, res) => {
                 profileImage: picture,
                 provider: "google",
                 providerId: sub,
-                isVarified: true
+                isVerified: true
             })
         }
-        const jwtToken = generateToken(user);
-        res.status(200).json({
+        const accessToken = generateAcessToken(user)
+        const refreshToken = generateRefreshToken(user);
+
+        user.refreshToken = refreshToken;
+        await user.save();
+
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            sameSite: "Strict",
+            secure: true,
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        })
+
+        return res.status(200).json({
             message: "Google login successfully",
-            token: jwtToken,
+            accessToken,
             user: {
                 id: user._id,
                 username: user.username,
