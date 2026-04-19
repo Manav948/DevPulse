@@ -5,7 +5,7 @@ export const createMonitor = async (req, res) => {
 
     try {
         const { title, url, interval } = req.body;
-        const userId = req.user.userId
+        const userId = req.user.id
 
         if (!title || !url) {
             return res.status(400).json({ message: "Title and url are required" })
@@ -79,7 +79,7 @@ export const startMonitor = async () => {
 export const deleteMonitor = async (req, res) => {
     try {
         const { id } = req.params;
-        const userId = req.user.userId
+        const userId = req.user.id
         if (!id) {
             return res.status(400).json({ message: "monitorId is required" });
         }
@@ -101,7 +101,7 @@ export const deleteMonitor = async (req, res) => {
 export const getMonitor = async (req, res) => {
     try {
         const { id } = req.params
-        const userId = req.user.userId
+        const userId = req.user.id
         const monitor = await Monitor.findOne({
             _id: id,
             userId
@@ -122,7 +122,7 @@ export const getMonitor = async (req, res) => {
 
 export const getAllMonitor = async (req, res) => {
     try {
-        const userId = req.user.userId
+        const userId = req.user.id
         const monitors = await Monitor.find({
             userId
         }).sort({ createdAt: -1 })

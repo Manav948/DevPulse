@@ -1,7 +1,7 @@
 import User from "../model/userModel.js"
 export const updateProfile = async (req, res) => {
     try {
-        const userId = req.user.userId;
+        const userId = req.user.id;
 
         if (!userId) {
             return res.status(401).json({ message: "User not Authenticated" });
@@ -36,7 +36,7 @@ export const updateProfile = async (req, res) => {
 
 export const getMe = async (req, res) => {
     try {
-        const userId = req.user.userId
+        const userId = req.user.id
         if (!userId) {
             return res.status(401).json({ message: "User not Authenticated" });
         }
