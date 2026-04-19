@@ -40,7 +40,7 @@ export const googleAuth = async (req, res) => {
 
         return res.status(200).json({
             message: "Google login successfully",
-            accessToken,
+            token: accessToken,
             user: {
                 id: user._id,
                 username: user.username,

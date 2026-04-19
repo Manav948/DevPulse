@@ -12,7 +12,8 @@ import ProtectedRoute from "./components/ProtectedRoute"
 // Redirect already-authenticated users away from auth pages
 const PublicOnlyRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
-  return isAuthenticated ? <Navigate to="/dashboard" replace /> : children;
+  const hasToken = !!localStorage.getItem("token");
+  return isAuthenticated || hasToken ? <Navigate to="/dashboard" replace /> : children;
 };
 
 function App() {

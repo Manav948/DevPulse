@@ -38,7 +38,7 @@ export const signUp = async (req, res) => {
         })
         res.status(201).json({
             message: "User registered",
-            accessToken,
+            token: accessToken,
             user: {
                 id: user._id,
                 username: user.username,
@@ -87,7 +87,7 @@ export const signIn = async (req, res) => {
 
         return res.status(200).json({
             message: "Login successful",
-            accessToken: acessToken,
+            token: acessToken,
             user: {
                 id: user._id,
                 username: user.username,
