@@ -1,6 +1,16 @@
 import Monitor from "../model/monitorModel.js";
 import axios from "axios"
 
+const WORKER_TICK_MS = 30 * 1000;
+
+const parseInterval = (interval) => {
+    const parsed = Number(interval);
+    if (!Number.isFinite(parsed) || parsed <= 0) {
+        return null;
+    }
+    return Math.floor(parsed);
+};
+
 export const createMonitor = async (req, res) => {
 
     try {
@@ -24,6 +34,16 @@ export const createMonitor = async (req, res) => {
             });
         }
 
+        const parsedInterval = interval !== undefined
+            ? parseInterval(interval)
+            : 60;
+
+        if (!parsedInterval) {
+            return res.status(400).json({
+                message: "Interval must be a positive number of seconds"
+            });
+        }
+
         const existingMonitor = await Monitor.findOne({
             userId,
             url
@@ -37,7 +57,7 @@ export const createMonitor = async (req, res) => {
             userId,
             title,
             url,
-            interval: interval || 60
+            interval: parsedInterval
         })
         return res.status(201).json({ message: "Monitor created successfully", monitor });
     } catch (error) {
@@ -51,8 +71,18 @@ export const startMonitor = async () => {
         console.log("Running monitoring cycle");
         try {
             const monitors = await Monitor.find({ isActive: true });
+            const now = Date.now();
 
             for (const monitor of monitors) {
+                const monitorIntervalMs = (parseInterval(monitor.interval) || 60) * 1000;
+                const lastCheckedAtMs = monitor.lastCheckedAt
+                    ? new Date(monitor.lastCheckedAt).getTime()
+                    : 0;
+
+                if (lastCheckedAtMs && now - lastCheckedAtMs < monitorIntervalMs) {
+                    continue;
+                }
+
                 const start = Date.now();
                 try {
                     await axios.get(monitor.url);
@@ -73,7 +103,7 @@ export const startMonitor = async () => {
         } catch (error) {
             console.log("Worker error:", error);
         }
-    }, 60000);
+    }, WORKER_TICK_MS);
 }
 
 export const deleteMonitor = async (req, res) => {

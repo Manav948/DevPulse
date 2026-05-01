@@ -31,7 +31,7 @@ const monitorSchema = mongoose.Schema({
         enum: ["UP", "DOWN", "UNKNOWN"],
         default: "UNKNOWN"
     },
-    lastChecked: {
+    lastCheckedAt: {
         type: Date
     }
 }, {
