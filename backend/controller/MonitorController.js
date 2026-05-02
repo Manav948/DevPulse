@@ -140,7 +140,7 @@ export const getMonitor = async (req, res) => {
         if (!monitor) {
             return res.status(404).json({ message: "Monitor not found" })
         }
-         return res.status(200).json({
+        return res.status(200).json({
             message: "Monitors get successfully",
             monitor
         });
@@ -166,6 +166,58 @@ export const getAllMonitor = async (req, res) => {
         });
     } catch (error) {
         console.log("Get Monitor Error:", error);
+        return res.status(500).json({ message: "Internal server error" })
+    }
+}
+
+export const updateMonitor = async (req, res) => {
+    try {
+        const { id } = req.params
+        const { title, url, interval } = req.body
+        const userId = req.user.id
+        const monitor = await Monitor.findOne({
+            _id: id,
+            userId
+        })
+
+        if (!monitor) {
+            return res.status(404).json({ messsage: "Monitor not found" })
+        }
+        if(url) {
+            let parsedUrl;
+            try {
+                parsedUrl = new URL(url);
+            } catch (error) {
+                return res.json(400).json({ message: "Invalid Url" })
+            }
+            if(!["http:", "https:"].includes(parsedUrl.protocol)){
+                return res.status(400).json({
+                    message : "URL must start with http or https"
+                })
+            }
+        }
+        const parsedInterval = interval !== undefined 
+        ? parseInterval(interval)
+        : monitor.interval
+
+        if(!parsedInterval) {
+            return res.status(400).json({
+                message : "Interval must be a positive number of seconds"
+            })
+        }
+        monitor.title = title || monitor.title
+        monitor.url = url || monitor.url
+        monitor.interval = parsedInterval
+
+        await monitor.save()
+
+        return res.status(200).json({
+            message : "Monitor updated successfully",
+            monitor
+        })
+    }
+    catch (error) {
+        console.log("Update Monitor Error:", error);
         return res.status(500).json({ message: "Internal server error" })
     }
 }

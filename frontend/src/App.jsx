@@ -8,6 +8,7 @@ import AddMonitor from "./pages/AddMonitor/AddMonitor"
 import Settings from "./pages/settings/Settings"
 import Home from "./pages/Home/Home"
 import ProtectedRoute from "./components/ProtectedRoute"
+import UpdateMonitor from "./components/updateMonitor"
 
 // Redirect already-authenticated users away from auth pages
 const PublicOnlyRoute = ({ children }) => {
@@ -33,6 +34,7 @@ function App() {
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/add" element={<ProtectedRoute><AddMonitor /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+        <Route path="/update" element={<ProtectedRoute><UpdateMonitor /></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   )

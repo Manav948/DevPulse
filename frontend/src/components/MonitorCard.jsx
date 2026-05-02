@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useNavigate} from "react-router-dom"
 import {
     AreaChart,
     Area,
@@ -12,6 +13,7 @@ const MonitorCard = ({ monitor, onDelete }) => {
     const [data, setData] = useState([]);
     const [openMenu, setOpenMenu] = useState(false);
     const menuRef = useRef();
+    const navigate = useNavigate();
 
     const isUp = monitor.lastStatus === "UP";
 
@@ -85,6 +87,7 @@ const MonitorCard = ({ monitor, onDelete }) => {
 
                         <button
                             className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-800 text-white"
+                            onClick={() => navigate("/update")}
                         >
                             Update
                         </button>
