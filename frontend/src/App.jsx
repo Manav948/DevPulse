@@ -8,7 +8,7 @@ import AddMonitor from "./pages/AddMonitor/AddMonitor"
 import Settings from "./pages/settings/Settings"
 import Home from "./pages/Home/Home"
 import ProtectedRoute from "./components/ProtectedRoute"
-import UpdateMonitor from "./components/updateMonitor"
+import UpdateMonitor from "./components/UpdateMonitor"
 
 // Redirect already-authenticated users away from auth pages
 const PublicOnlyRoute = ({ children }) => {
