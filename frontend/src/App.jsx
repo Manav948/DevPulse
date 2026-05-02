@@ -34,7 +34,7 @@ function App() {
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/add" element={<ProtectedRoute><AddMonitor /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-        <Route path="/update" element={<ProtectedRoute><UpdateMonitor /></ProtectedRoute>} />
+        <Route path="/update/:id" element={<ProtectedRoute><UpdateMonitor /></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   )

@@ -87,7 +87,7 @@ const MonitorCard = ({ monitor, onDelete }) => {
 
                         <button
                             className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-800 text-white"
-                            onClick={() => navigate("/update")}
+                            onClick={() => navigate(`/update/${monitor._id}`)}
                         >
                             Update
                         </button>

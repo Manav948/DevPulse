@@ -188,7 +188,7 @@ export const updateMonitor = async (req, res) => {
             try {
                 parsedUrl = new URL(url);
             } catch (error) {
-                return res.json(400).json({ message: "Invalid Url" })
+                return res.status(400).json({ message: "Invalid Url" })
             }
             if(!["http:", "https:"].includes(parsedUrl.protocol)){
                 return res.status(400).json({
