@@ -6,9 +6,10 @@ import Layout from "../../components/Layout";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import toast from "react-hot-toast";
 
 const Settings = () => {
-    const { user, updateUser } = useAuth();
+    const { user, updateUser , logout} = useAuth();
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
@@ -37,6 +38,12 @@ const Settings = () => {
             </Layout>
         );
     }
+
+const handleLogout = () => {
+    logout();
+    toast.success("Logout successful");
+    navigate("/signin");
+}    
 
     return (
         <Layout>
@@ -129,15 +136,15 @@ const Settings = () => {
                     <div className="p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <div>
                             <p className="font-medium text-red-400">
-                                Delete account
+                                logout account
                             </p>
                             <p className="text-gray-400 text-sm mt-1">
-                                Permanently delete your account.
+                                logout your account.
                             </p>
                         </div>
 
-                        <button className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg w-full sm:w-auto">
-                            Delete
+                        <button onClick={handleLogout} disabled={loading} className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg w-full sm:w-auto">
+                            {loading ? "Logging out..." : "Logout"}
                         </button>
                     </div>
 

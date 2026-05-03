@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import React, { createContext, useContext, useEffect, useState } from "react";
+import api from "../lib/axios";
 
 
 const AuthContext = createContext();
@@ -11,10 +12,16 @@ export const AuthProvider = ({ children }) => {
 
     const login = (userData) => {
         localStorage.setItem("token", userData.token);
-        localStorage.setItem("user", JSON.stringify(userData.user))
-        setUser(userData.user);
         setToken(userData.token);
-    }
+
+        if (userData.user) {
+            setUser(userData.user);
+            localStorage.setItem("user", JSON.stringify(userData.user));
+        } else {
+            setUser(null);
+            localStorage.removeItem("user");
+        }
+    };
 
     const logout = () => {
         localStorage.removeItem("token")
@@ -29,10 +36,19 @@ export const AuthProvider = ({ children }) => {
     };
 
     useEffect(() => {
-        if (user) {
-            localStorage.setItem("user", JSON.stringify(user))
-        }
-    }, [token])
+        const syncUser = async () => {
+            if (!token) return;
+            try {
+                const res = await api.get("/api/v1/users/me");
+                setUser(res.data);
+                localStorage.setItem("user", JSON.stringify(res.data));
+            } catch (error) {
+                console.log("Failed to sync user", error);
+            }
+        };
+
+        syncUser();
+    }, [token]);
     return (
         <AuthContext.Provider
             value={{
