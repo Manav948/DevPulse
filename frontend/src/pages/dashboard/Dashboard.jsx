@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import api from "../../lib/axios.js";
-import Header from "../../components/Header.jsx";
 import MonitorCard from "../../components/MonitorCard.jsx";
+import Layout from "../../components/Layout.jsx";
 import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
@@ -33,13 +33,12 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="bg-black min-h-screen text-white">
-      <Header />
-
-      <div className="max-w-6xl mx-auto px-4 py-8">
+    <Layout>
+      <div className="min-h-full bg-black">
+      <div className="max-w-6xl mx-auto px-4 py-6 md:py-8">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
           <div>
-            <h1 className="text-3xl font-bold">Monitoring Dashboard</h1>
+            <h1 className="text-3xl font-bold mb-2">Monitoring Dashboard</h1>
             <p className="text-gray-400 mt-1">
               Track uptime, performance and status of your services in real-time.
             </p>
@@ -73,7 +72,8 @@ const Dashboard = () => {
           </div>
         )}
       </div>
-    </div>
+      </div>
+    </Layout>
   );
 };
 

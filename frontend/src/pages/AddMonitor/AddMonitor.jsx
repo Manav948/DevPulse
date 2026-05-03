@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import api from "../../lib/axios";
 import toast from "react-hot-toast";
-import Header from "../../components/Header";
+import Layout from "../../components/Layout";
 import { useNavigate } from "react-router-dom";
 
 const AddMonitor = () => {
@@ -44,21 +44,21 @@ const AddMonitor = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[#020617] relative overflow-hidden">
+        <Layout>
+        <div className="min-h-screen bg-black relative overflow-hidden">
 
             <div className="absolute inset-0 
             bg-linear-to-br from-green-500 via-transparent to-transparent 
             blur-3xl opacity-30" />
 
-            <Header />
-            <div className="flex items-center justify-center px-4 py-16 relative z-10">
+            <div className="relative z-10 flex items-center justify-center px-4 py-12 md:py-16">
                 <div className="relative w-full max-w-md rounded-2xl p-px
                 bg-linear-to-br from-green-500/20 via-emerald-400/10 to-transparent">
 
                     <div className="absolute -inset-2 
                     bg-green-500/10 blur-2xl opacity-40 rounded-2xl" />
 
-                    <div className="relative bg-[#020617]/90 backdrop-blur-xl borderborder-green-400/10 
+                    <div className="relative bg-black/90 backdrop-blur-xl border border-green-400/10 
                     rounded-2xl p-7 shadow-[0_0_80px_rgba(34,197,94,0.15)]">
 
                         <div className="absolute inset-0 rounded-2xl 
@@ -201,6 +201,7 @@ const AddMonitor = () => {
                 </div>
             </div>
         </div>
+        </Layout>
     );
 };
 

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import api from "../../lib/axios";
 import UserAvatar from "../../components/UserAvatar";
 import EditProfileModal from "../../components/EditProfileModal";
+import Layout from "../../components/Layout";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
@@ -29,15 +30,18 @@ const Settings = () => {
 
     if (loading) {
         return (
+            <Layout>
             <div className="text-white flex justify-center items-center min-h-screen">
                 Loading account...
             </div>
+            </Layout>
         );
     }
 
     return (
-        <div className="bg-black text-white min-h-screen pt-24">
-            <div className="max-w-4xl mx-auto px-4 space-y-6">
+        <Layout>
+        <div className="bg-black text-white min-h-screen">
+            <div className="max-w-4xl mx-auto px-4 py-6 space-y-6 md:py-8">
 
                 <div className="flex items-start justify-between">
                     <div>
@@ -147,6 +151,7 @@ const Settings = () => {
                 />
             </div>
         </div>
+        </Layout>
     );
 };
 

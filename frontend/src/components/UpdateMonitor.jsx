@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import api from "../lib/axios";
 import { useNavigate, useParams } from "react-router-dom";
-import Header from "./Header";
+import Layout from "./Layout";
 
 const UpdateMonitor = () => {
   const { id } = useParams();
@@ -46,12 +46,9 @@ const UpdateMonitor = () => {
   };
 
   return (
+    <Layout>
     <div className="relative min-h-screen bg-black text-white overflow-hidden">
-      <div className="absolute top-0 left-0 w-full z-20">
-        <Header />
-      </div>
-
-      <div className="relative z-10 flex items-center justify-center min-h-screen px-4 pt-28">
+      <div className="relative z-10 flex min-h-[calc(100vh-3.5rem)] items-center justify-center px-4 py-10 md:min-h-[calc(100vh-4rem)]">
         <form
           onSubmit={handleUpdate}
           className="w-full max-w-2xl backdrop-blur-2xl bg-white/5 border border-white/10 rounded-3xl p-8 space-y-8 
@@ -129,6 +126,7 @@ const UpdateMonitor = () => {
         </form>
       </div>
     </div>
+    </Layout>
   );
 };
 
