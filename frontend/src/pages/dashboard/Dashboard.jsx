@@ -1,29 +1,59 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import api from "../../lib/axios.js";
 import MonitorCard from "../../components/MonitorCard.jsx";
 import Layout from "../../components/Layout.jsx";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext.jsx";
 
 const Dashboard = () => {
   const [monitors, setMonitors] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { token } = useAuth();
+  const navigate = useNavigate();
+
+  const fetchMonitor = useCallback(async () => {
+    if (!token) {
+      setMonitors([]);
+      setLoading(false);
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const res = await api.get("/api/v1/monitor");
+      setMonitors(res?.data?.monitors || []);
+    } catch (error) {
+      console.log("Failed to load monitors:", error);
+      setMonitors([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [token]);
 
   useEffect(() => {
-    const fetchMonitor = async () => {
-      try {
-        const res = await api.get("/api/v1/monitor");
-        setMonitors(res.data.monitors);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
+    fetchMonitor();
+  }, [fetchMonitor]);
+
+  useEffect(() => {
+    const handleFocusRefetch = () => {
+      // Keep dashboard fresh when user returns from another page/tab.
+      fetchMonitor();
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        fetchMonitor();
       }
     };
 
-    fetchMonitor();
-  }, []);
+    window.addEventListener("focus", handleFocusRefetch);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
-  const navigate = useNavigate();
+    return () => {
+      window.removeEventListener("focus", handleFocusRefetch);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [fetchMonitor]);
 
   const upCount = monitors.filter((m) => m.lastStatus === "UP").length;
   const downCount = monitors.filter((m) => m.lastStatus === "DOWN").length;
@@ -67,7 +97,11 @@ const Dashboard = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {monitors.map((monitor) => (
-              <MonitorCard key={monitor._id} monitor={monitor} onDelete={handleDelete} />
+              <MonitorCard
+                key={monitor._id}
+                monitor={monitor}
+                onDelete={handleDelete}
+              />
             ))}
           </div>
         )}

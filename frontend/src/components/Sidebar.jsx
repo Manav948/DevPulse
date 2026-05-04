@@ -16,9 +16,9 @@ import UserAvatar from "./UserAvatar";
 
 const navItems = [
   { name: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
-  { name: "Monitors", path: "/dashboard", icon: Activity },
+  { name: "Monitors", path: "/monitors", icon: Activity },
   { name: "Add monitor", path: "/add", icon: Plus },
-  { name: "Analytics", path: "/dashboard", icon: BarChart3 },
+  { name: "Analytics", path: "/analutics", icon: BarChart3 },
   { name: "Settings", path: "/profile", icon: Settings },
 ];
 
@@ -99,7 +99,6 @@ const Sidebar = () => {
           ${open ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
         `}
       >
-        {/* Desktop brand */}
         <div className="hidden items-center justify-between gap-2 border-b border-white/10 px-5 py-6 md:flex">
           <Link
             to="/dashboard"

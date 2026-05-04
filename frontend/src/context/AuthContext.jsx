@@ -44,11 +44,30 @@ export const AuthProvider = ({ children }) => {
                 localStorage.setItem("user", JSON.stringify(res.data));
             } catch (error) {
                 console.log("Failed to sync user", error);
+                if (error?.response?.status === 401) {
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("user");
+                    setToken(null);
+                    setUser(null);
+                }
             }
         };
 
         syncUser();
     }, [token]);
+
+    useEffect(() => {
+        const syncAuthFromStorage = () => {
+            const storedToken = localStorage.getItem("token");
+            const storedUser = localStorage.getItem("user");
+
+            setToken(storedToken || null);
+            setUser(storedUser ? JSON.parse(storedUser) : null);
+        };
+
+        window.addEventListener("storage", syncAuthFromStorage);
+        return () => window.removeEventListener("storage", syncAuthFromStorage);
+    }, []);
     return (
         <AuthContext.Provider
             value={{
