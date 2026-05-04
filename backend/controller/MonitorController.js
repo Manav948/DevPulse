@@ -173,7 +173,7 @@ export const getAllMonitor = async (req, res) => {
 export const updateMonitor = async (req, res) => {
     try {
         const { id } = req.params
-        const { title, url, interval } = req.body
+        const { title, url, interval, isActive } = req.body
         const userId = req.user.id
         const monitor = await Monitor.findOne({
             _id: id,
@@ -208,6 +208,9 @@ export const updateMonitor = async (req, res) => {
         monitor.title = title || monitor.title
         monitor.url = url || monitor.url
         monitor.interval = parsedInterval
+        if (typeof isActive === "boolean") {
+            monitor.isActive = isActive
+        }
 
         await monitor.save()
 

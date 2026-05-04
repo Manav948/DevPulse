@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useNavigate} from "react-router-dom"
+import { Link, useNavigate} from "react-router-dom"
 import {
     AreaChart,
     Area,
     ResponsiveContainer,
 } from "recharts";
 import api from "../lib/axios";
-import { EllipsisIcon, EllipsisVertical } from "lucide-react";
+import { EllipsisVertical } from "lucide-react";
 import toast from "react-hot-toast";
 
 const MonitorCard = ({ monitor, onDelete }) => {
@@ -70,54 +70,33 @@ const MonitorCard = ({ monitor, onDelete }) => {
     const createdDate = new Date(monitor.createdAt).toLocaleDateString();
 
     return (
-        <div className="relative bg-black border border-white/10 rounded-2xl p-5 shadow-lg hover:shadow-xl transition-all">
+        <div className="relative group">
+            <Link
+                to={`/monitor/${monitor._id}`}
+                className="relative block overflow-hidden rounded-2xl border border-white/10 bg-black/40 p-5 pr-12 shadow-lg backdrop-blur-md transition-all hover:border-[#22c55e]/25 hover:shadow-[0_12px_40px_rgba(34,197,94,0.12)]"
+            >
 
-            <div className={`absolute inset-0 rounded-2xl blur-2xl opacity-10 ${isUp ? "bg-green-500" : "bg-red-500"}`} />
-
-            <div className="absolute top-4 right-4 cursor-pointer" ref={menuRef}>
-                <button
-                    onClick={() => setOpenMenu(!openMenu)}
-                    className="text-white text-lg cursor-pointer"
-                >
-                    <EllipsisVertical />
-                </button>
-
-                {openMenu && (
-                    <div className="absolute right-0 mt-2 w-32 bg-black border border-green-900/70 rounded-lg shadow-lg z-10 cursor-pointer">
-
-                        <button
-                            className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-800 text-white"
-                            onClick={() => navigate(`/update/${monitor._id}`)}
-                        >
-                            Update
-                        </button>
-
-                        <button
-                            onClick={handleDelete}
-                            className="block w-full text-left px-4 py-2 text-sm hover:bg-red-500/20 text-red-400"
-                        >
-                            Delete
-                        </button>
-
-                    </div>
-                )}
-            </div>
-
-            <div className="mb-3">
+            <div className="mb-1 relative z-10">
                 <p className="text-xs text-gray-400">Total Response</p>
                 <h2 className="text-2xl font-bold text-white">
                     {Math.floor(Math.random() * 900 + 100)} ms
                 </h2>
             </div>
 
-            <div className="h-24 mb-4" style={{ minHeight: "96px" }}>
+            <div className="h-20 mb-2 relative z-10" style={{ minHeight: "80px", margin: "0 -20px" }}>
                 <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={data}>
+                        <defs>
+                            <linearGradient id={`color-${isUp ? 'up' : 'down'}`} x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor={isUp ? "#22c55e" : "#ef4444"} stopOpacity={0.3}/>
+                                <stop offset="95%" stopColor={isUp ? "#22c55e" : "#ef4444"} stopOpacity={0}/>
+                            </linearGradient>
+                        </defs>
                         <Area
-                            type="linear"
+                            type="monotone"
                             dataKey="value"
-                            stroke={isUp ? "#00ff9c" : "#ff4d4f"}
-                            fill={isUp ? "rgba(0,255,156,0.15)" : "rgba(255,77,79,0.15)"}
+                            stroke={isUp ? "#22c55e" : "#ef4444"}
+                            fill={`url(#color-${isUp ? 'up' : 'down'})`}
                             strokeWidth={2}
                             dot={false}
                             isAnimationActive
@@ -127,7 +106,7 @@ const MonitorCard = ({ monitor, onDelete }) => {
                 </ResponsiveContainer>
             </div>
 
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center relative z-10 mt-2">
                 <div>
                     <h3 className="text-sm font-semibold text-white">
                         {monitor.title}
@@ -151,6 +130,54 @@ const MonitorCard = ({ monitor, onDelete }) => {
                         ? new Date(monitor.lastCheckedAt).toLocaleTimeString()
                         : "Not checked"}
                 </span>
+            </div>
+            </Link>
+
+            <div className="absolute top-4 right-4 z-20 cursor-pointer" ref={menuRef}>
+                <button
+                    type="button"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setOpenMenu(!openMenu);
+                    }}
+                    className="rounded-lg p-1 text-white transition hover:bg-white/10"
+                    aria-label="Monitor actions"
+                >
+                    <EllipsisVertical className="h-5 w-5" />
+                </button>
+
+                {openMenu && (
+                    <div className="absolute right-0 mt-2 w-32 rounded-lg border border-green-900/70 bg-black/95 shadow-lg backdrop-blur-md z-30">
+
+                        <button
+                            type="button"
+                            className="block w-full px-4 py-2 text-left text-sm text-white hover:bg-gray-800"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setOpenMenu(false);
+                                navigate(`/update/${monitor._id}`);
+                            }}
+                        >
+                            Update
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                handleDelete();
+                                setOpenMenu(false);
+                            }}
+                            className="block w-full px-4 py-2 text-left text-sm text-red-400 hover:bg-red-500/20"
+                        >
+                            Delete
+                        </button>
+
+                    </div>
+                )}
             </div>
         </div>
     );

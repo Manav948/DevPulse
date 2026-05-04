@@ -36,13 +36,16 @@ const Sidebar = () => {
   };
 
   const linkIsActive = (item) => {
+    if (item.name === "Monitors" && location.pathname.startsWith("/monitor")) {
+      return true;
+    }
     if (location.pathname !== item.path) return false;
     if (item.path !== "/dashboard") return true;
     return item.name === "Dashboard";
   };
 
   return (
-    <div className="flex flex-col md:h-screen md:w-72 md:shrink-0 md:border-r md:border-white/10 md:bg-black">
+      <div className="flex flex-col md:min-h-screen md:w-72 md:shrink-0 md:border-r md:border-white/10 md:bg-black">
       {/* Mobile: single top bar (full width) */}
       <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center justify-between border-b border-white/10 bg-black/90 px-4 backdrop-blur-xl md:hidden">
         <Link

@@ -7,3 +7,34 @@
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
+
+@keyframes devpulse-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.devpulse-fade-in {
+  animation: devpulse-fade-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.devpulse-stagger-1 {
+  animation-delay: 0.03s;
+}
+.devpulse-stagger-2 {
+  animation-delay: 0.08s;
+}
+.devpulse-stagger-3 {
+  animation-delay: 0.13s;
+}
+.devpulse-stagger-4 {
+  animation-delay: 0.18s;
+}
+.devpulse-stagger-5 {
+  animation-delay: 0.23s;
+}
