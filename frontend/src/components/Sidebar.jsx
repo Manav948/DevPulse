@@ -18,7 +18,7 @@ const navItems = [
   { name: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
   { name: "Monitors", path: "/monitors", icon: Activity },
   { name: "Add monitor", path: "/add", icon: Plus },
-  { name: "Analytics", path: "/analutics", icon: BarChart3 },
+  { name: "Analytics", path: "/analytics", icon: BarChart3 },
   { name: "Settings", path: "/profile", icon: Settings },
 ];
 

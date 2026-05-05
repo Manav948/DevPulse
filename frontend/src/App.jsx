@@ -11,6 +11,7 @@ import ProtectedRoute from "./components/ProtectedRoute"
 import UpdateMonitor from "./components/UpdateMonitor"
 import MonitorDetails from "./pages/monitor/MonitorDetails"
 import Monitors from "./pages/monitor/Monitors"
+import Analytics from "./pages/analytics/Analytics"
 
 // Redirect already-authenticated users away from auth pages
 const PublicOnlyRoute = ({ children }) => {
@@ -34,6 +35,7 @@ function App() {
 
         {/* Protected pages — redirect to /signin if not authenticated */}
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
         <Route path="/monitors" element={<ProtectedRoute><Monitors /></ProtectedRoute>} />
         <Route path="/monitor/:id" element={<ProtectedRoute><MonitorDetails /></ProtectedRoute>} />
         <Route path="/add" element={<ProtectedRoute><AddMonitor /></ProtectedRoute>} />
