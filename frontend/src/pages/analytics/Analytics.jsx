@@ -152,6 +152,29 @@ const Analytics = () => {
     fetchMonitor();
   }, [fetchMonitor]);
 
+  // Auto-refresh mock data to trigger chart animations
+  useEffect(() => {
+    if (monitors.length > 0) {
+      const interval = setInterval(() => {
+        setMockStats(prev => {
+          const newData = generateMockData(monitors);
+          // Keep the trend flowing smoothly by shifting and adding
+          if (prev && prev.uptimeTrend) {
+            const newTrend = [...prev.uptimeTrend.slice(1)];
+            const lastTime = new Date();
+            newTrend.push({
+              time: lastTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+              uptime: 98 + Math.random() * 2
+            });
+            newData.uptimeTrend = newTrend;
+          }
+          return newData;
+        });
+      }, 3500); // Update every 3.5 seconds
+      return () => clearInterval(interval);
+    }
+  }, [monitors]);
+
   useEffect(() => {
     const handleFocusRefetch = () => fetchMonitor();
     const handleVisibilityChange = () => {
