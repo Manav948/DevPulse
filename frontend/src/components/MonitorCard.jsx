@@ -12,6 +12,7 @@ import toast from "react-hot-toast";
 const MonitorCard = ({ monitor, onDelete }) => {
     const [data, setData] = useState([]);
     const [openMenu, setOpenMenu] = useState(false);
+    const [responseTime] = useState(() => Math.floor(Math.random() * 900 + 100));
     const menuRef = useRef();
     const navigate = useNavigate();
 
@@ -79,7 +80,7 @@ const MonitorCard = ({ monitor, onDelete }) => {
             <div className="mb-1 relative z-10">
                 <p className="text-xs text-gray-400">Total Response</p>
                 <h2 className="text-2xl font-bold text-white">
-                    {Math.floor(Math.random() * 900 + 100)} ms
+                    {responseTime} ms
                 </h2>
             </div>
 
@@ -106,15 +107,15 @@ const MonitorCard = ({ monitor, onDelete }) => {
                 </ResponsiveContainer>
             </div>
 
-            <div className="flex justify-between items-center relative z-10 mt-2">
-                <div>
-                    <h3 className="text-sm font-semibold text-white">
+            <div className="flex justify-between items-start gap-3 relative z-10 mt-2">
+                <div className="min-w-0">
+                    <h3 className="text-sm font-semibold text-white leading-tight wrap-break-word line-clamp-2">
                         {monitor.title}
                     </h3>
-                    <p className="text-xs text-gray-400">{monitor.url}</p>
+                    <p className="text-xs text-gray-400 break-all line-clamp-2 mt-1 leading-relaxed">{monitor.url}</p>
                 </div>
 
-                <span className={`px-3 py-1 text-xs rounded-full ${isUp
+                <span className={`shrink-0 px-3 py-1 text-xs rounded-full ${isUp
                     ? "bg-green-500/20 text-green-400"
                     : "bg-red-500/20 text-red-400"
                     }`}>

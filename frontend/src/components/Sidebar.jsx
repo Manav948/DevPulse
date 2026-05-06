@@ -22,6 +22,14 @@ const navItems = [
   { name: "Settings", path: "/profile", icon: Settings },
 ];
 
+const mobileBottomNavItems = [
+  { name: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
+  { name: "Monitors", path: "/monitors", icon: Activity },
+  { name: "Add", path: "/add", icon: Plus, isPrimary: true },
+  { name: "Analytics", path: "/analytics", icon: BarChart3 },
+  { name: "Profile", path: "/profile", icon: Settings },
+];
+
 const Sidebar = () => {
   const [open, setOpen] = useState(false);
   const location = useLocation();
@@ -45,7 +53,7 @@ const Sidebar = () => {
   };
 
   return (
-      <div className="flex flex-col md:min-h-screen md:w-72 md:shrink-0 md:border-r md:border-white/10 md:bg-black">
+    <div className="flex flex-col md:min-h-screen md:w-72 md:shrink-0 md:border-r md:border-white/10 md:bg-black">
       {/* Mobile: single top bar (full width) */}
       <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center justify-between border-b border-white/10 bg-black/90 px-4 backdrop-blur-xl md:hidden">
         <Link
@@ -184,6 +192,37 @@ const Sidebar = () => {
           </div>
         )}
       </aside>
+
+      <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-white/10 bg-black/90 px-2 py-2 backdrop-blur-xl md:hidden">
+        <div className="mx-auto flex max-w-md items-end justify-between gap-1">
+          {mobileBottomNavItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = linkIsActive(item);
+            return (
+              <Link
+                key={item.name}
+                to={item.path}
+                className={`flex min-w-0 flex-1 flex-col items-center justify-center rounded-xl py-1.5 text-[10px] transition ${
+                  item.isPrimary
+                    ? "text-white"
+                    : isActive
+                    ? "bg-green-500/10 text-green-400"
+                    : "text-zinc-400 hover:bg-white/5 hover:text-white"
+                }`}
+              >
+                {item.isPrimary ? (
+                  <span className="mb-1 inline-flex h-10 w-10 items-center justify-center rounded-full bg-green-500 text-black shadow-[0_0_20px_rgba(34,197,94,0.45)]">
+                    <Icon size={20} />
+                  </span>
+                ) : (
+                  <Icon size={18} />
+                )}
+                <span className={item.isPrimary ? "font-medium" : ""}>{item.name}</span>
+              </Link>
+            );
+          })}
+        </div>
+      </nav>
     </div>
   );
 };

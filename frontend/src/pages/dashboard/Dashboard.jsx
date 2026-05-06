@@ -12,14 +12,16 @@ import {
   ShieldCheck,
   AlertOctagon,
   Clock,
-  ExternalLink,
-  Wifi
+  Wifi,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 
 const Dashboard = () => {
   const [monitors, setMonitors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [terminalLogs, setTerminalLogs] = useState([]);
+  const [showLogs, setShowLogs] = useState(false);
   const terminalContainerRef = useRef(null);
   const { token, user } = useAuth();
   const navigate = useNavigate();
@@ -90,8 +92,8 @@ const Dashboard = () => {
 
   return (
     <Layout>
-      <div className="min-h-full bg-[#030303] text-zinc-300 font-sans selection:bg-green-500/30 relative overflow-hidden flex flex-col h-screen">
-        <div className="max-w-7xl w-full mx-auto px-4 py-6 md:py-8 relative z-10 flex-1 flex flex-col min-h-0">
+      <div className="min-h-full bg-[#030303] text-zinc-300 font-sans selection:bg-green-500/30 relative overflow-hidden flex flex-col">
+        <div className="max-w-7xl w-full mx-auto px-4 py-6 pb-24 md:pb-6 md:py-8 relative z-10 flex-1 flex flex-col min-h-0">
           
           {/* Top Command Bar */}
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4 bg-white/2 border border-white/5 rounded-2xl p-5 backdrop-blur-xl shadow-2xl shrink-0">
@@ -167,12 +169,18 @@ const Dashboard = () => {
                                   </span>
                                 </div>
                                 <div className="min-w-0 flex-1">
-                                  <Link to={`/monitor/${monitor._id}`} className="font-bold text-white hover:text-green-400 transition-colors text-base truncate block" title={monitor.title}>
+                                  <Link
+                                    to={`/monitor/${monitor._id}`}
+                                    className="font-bold text-white hover:text-green-400 transition-colors text-sm md:text-base leading-tight line-clamp-2 wrap-break-word"
+                                    title={monitor.title}
+                                  >
                                     {monitor.title}
                                   </Link>
-                                  <div className="flex items-center gap-1.5 text-xs text-zinc-500 mt-0.5">
+                                  <div className="flex items-start gap-1.5 text-xs text-zinc-500 mt-1 min-w-0">
                                     <Globe className="h-3 w-3 shrink-0" />
-                                    <span className="truncate" title={monitor.url}>{monitor.url}</span>
+                                    <span className="break-all line-clamp-2 leading-relaxed" title={monitor.url}>
+                                      {monitor.url}
+                                    </span>
                                   </div>
                                 </div>
                               </div>
@@ -197,42 +205,58 @@ const Dashboard = () => {
             </div>
 
             {/* Right Col: Live Terminal Feed */}
-            <div className="w-full lg:w-87.5 xl:w-100 flex flex-col h-100 lg:h-auto bg-black/60 border border-white/10 rounded-2xl overflow-hidden backdrop-blur-xl shadow-2xl shrink-0">
-              <div className="bg-white/5 border-b border-white/10 px-4 py-3 flex items-center justify-between shrink-0">
+            <div className="w-full lg:w-87.5 xl:w-100 flex flex-col bg-black/60 border border-white/10 rounded-2xl overflow-hidden backdrop-blur-xl shadow-2xl shrink-0">
+              <div className="bg-white/5 border-b border-white/10 px-4 py-3 flex items-center justify-between gap-2 shrink-0">
                 <div className="flex items-center gap-2 text-sm font-medium text-white">
                   <Terminal className="h-4 w-4 text-green-400" /> System Log
                 </div>
-                <div className="flex gap-1.5">
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowLogs((prev) => !prev)}
+                    className="inline-flex items-center gap-1.5 rounded-md border border-white/10 bg-white/5 px-2.5 py-1 text-xs text-zinc-200 hover:bg-white/10 transition-colors cursor-pointer"
+                  >
+                    {showLogs ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                    {showLogs ? "Hide" : "Show"}
+                  </button>
                   <div className="w-2.5 h-2.5 rounded-full bg-white/10"></div>
                   <div className="w-2.5 h-2.5 rounded-full bg-white/10"></div>
                   <div className="w-2.5 h-2.5 rounded-full bg-white/10"></div>
                 </div>
               </div>
-              
-              <div ref={terminalContainerRef} className="flex-1 p-4 overflow-y-auto font-mono text-xs custom-scrollbar">
-                {terminalLogs.length === 0 ? (
-                  <div className="text-zinc-600 animate-pulse">Awaiting telemetry data...</div>
-                ) : (
-                  <div className="flex flex-col gap-2">
-                    {terminalLogs.map((log) => (
-                      <div key={log.id} className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-                        <span className="text-zinc-600 mr-3">[{log.time.toLocaleTimeString([], { hour12: false })}]</span>
-                        <span className={
-                          log.type === 'success' ? 'text-green-400/90' : 
-                          log.type === 'error' ? 'text-red-400/90' : 'text-blue-400/90'
-                        }>
-                          {log.text}
-                        </span>
+
+              {showLogs ? (
+                <>
+                  <div ref={terminalContainerRef} className="h-72 lg:h-100 p-4 overflow-y-auto font-mono text-xs custom-scrollbar">
+                    {terminalLogs.length === 0 ? (
+                      <div className="text-zinc-600 animate-pulse">Awaiting telemetry data...</div>
+                    ) : (
+                      <div className="flex flex-col gap-2">
+                        {terminalLogs.map((log) => (
+                          <div key={log.id} className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+                            <span className="text-zinc-600 mr-3">[{log.time.toLocaleTimeString([], { hour12: false })}]</span>
+                            <span className={
+                              log.type === 'success' ? 'text-green-400/90' :
+                              log.type === 'error' ? 'text-red-400/90' : 'text-blue-400/90'
+                            }>
+                              {log.text}
+                            </span>
+                          </div>
+                        ))}
                       </div>
-                    ))}
+                    )}
                   </div>
-                )}
-              </div>
-              
-              <div className="bg-white/2 border-t border-white/5 px-4 py-3 flex items-center gap-2 shrink-0">
-                <Wifi className="h-4 w-4 text-green-500 animate-pulse" />
-                <span className="text-xs font-mono text-green-500/70">Socket connected. Live streaming...</span>
-              </div>
+
+                  <div className="bg-white/2 border-t border-white/5 px-4 py-3 flex items-center gap-2 shrink-0">
+                    <Wifi className="h-4 w-4 text-green-500 animate-pulse" />
+                    <span className="text-xs font-mono text-green-500/70">Socket connected. Live streaming...</span>
+                  </div>
+                </>
+              ) : (
+                <div className="px-4 py-5 text-xs text-zinc-500">
+                  Logs are hidden. Tap <span className="text-zinc-300">Show</span> to view live telemetry.
+                </div>
+              )}
             </div>
 
           </div>
