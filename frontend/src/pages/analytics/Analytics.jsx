@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import api from "../../lib/axios.js";
 import Layout from "../../components/Layout.jsx";
 import { useAuth } from "../../context/AuthContext.jsx";
+import { useSocket } from "../../context/SocketContext.jsx";
 import {
   Activity,
   AlertTriangle,
@@ -126,6 +127,7 @@ const Analytics = () => {
   const [loading, setLoading] = useState(true);
   const [mockStats, setMockStats] = useState(null);
   const { token } = useAuth();
+  const socket = useSocket();
 
   const fetchMonitor = useCallback(async () => {
     if (!token) {
@@ -152,28 +154,108 @@ const Analytics = () => {
     fetchMonitor();
   }, [fetchMonitor]);
 
-  // Auto-refresh mock data to trigger chart animations
+  // Real-time WebSocket Data Updates
   useEffect(() => {
-    if (monitors.length > 0) {
-      const interval = setInterval(() => {
-        setMockStats(prev => {
-          const newData = generateMockData(monitors);
-          // Keep the trend flowing smoothly by shifting and adding
-          if (prev && prev.uptimeTrend) {
-            const newTrend = [...prev.uptimeTrend.slice(1)];
-            const lastTime = new Date();
-            newTrend.push({
-              time: lastTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
-              uptime: 98 + Math.random() * 2
-            });
-            newData.uptimeTrend = newTrend;
-          }
-          return newData;
+    if (!socket) return;
+
+    // Slowly advance the uptime trend chart for visual effect
+    const interval = setInterval(() => {
+      setMockStats(prev => {
+        if (!prev || !prev.uptimeTrend) return prev;
+        const newTrend = [...prev.uptimeTrend.slice(1)];
+        const lastTime = new Date();
+        newTrend.push({
+          time: lastTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+          uptime: prev.globalUptime || 99.9 // Keep relatively steady for dummy visualization
         });
-      }, 3500); // Update every 3.5 seconds
-      return () => clearInterval(interval);
-    }
-  }, [monitors]);
+        return { ...prev, uptimeTrend: newTrend };
+      });
+    }, 5000);
+
+    const handleMonitorUpdate = (data) => {
+      // Update monitors array
+      setMonitors(prev => prev.map(m => {
+        if (m._id === data.monitorId) {
+          return { ...m, lastStatus: data.status, lastCheckedAt: data.lastCheckedAt };
+        }
+        return m;
+      }));
+
+      // Update analytics stats
+      setMockStats(prev => {
+        if (!prev) return prev;
+        
+        let newResponseTimes = [...prev.responseTimes];
+        const rtIndex = newResponseTimes.findIndex(rt => rt.id === data.monitorId);
+        if (rtIndex >= 0) {
+          newResponseTimes[rtIndex] = {
+            ...newResponseTimes[rtIndex],
+            time: data.responseTime || 0,
+            status: data.status
+          };
+        } else {
+           newResponseTimes.push({
+             id: data.monitorId,
+             name: data.title || 'Endpoint',
+             time: data.responseTime || 0,
+             status: data.status
+           });
+        }
+
+        const slowestApis = [...newResponseTimes].sort((a, b) => b.time - a.time).slice(0, 4);
+
+        let newIncidents = [...prev.incidents];
+        if (data.status === 'DOWN') {
+          newIncidents.unshift({
+            id: Date.now().toString(),
+            monitorName: data.title || 'Endpoint',
+            status: 'DOWN',
+            time: new Date(data.lastCheckedAt || Date.now()),
+            responseTime: data.responseTime || 0
+          });
+          newIncidents = newIncidents.slice(0, 5);
+        }
+
+        let newFailing = [...prev.failingMonitors];
+        if (data.status === 'DOWN') {
+           const fIndex = newFailing.findIndex(f => f.id === data.monitorId);
+           if (fIndex >= 0) {
+              newFailing[fIndex].failures += 1;
+              newFailing[fIndex].lastFailure = new Date();
+           } else {
+              newFailing.push({
+                 id: data.monitorId,
+                 name: data.title || 'Endpoint',
+                 failures: 1,
+                 lastFailure: new Date()
+              });
+           }
+           newFailing.sort((a,b) => b.failures - a.failures);
+           newFailing = newFailing.slice(0, 4);
+        }
+
+        const avgResponse = newResponseTimes.length > 0 
+           ? Math.floor(newResponseTimes.reduce((acc, curr) => acc + curr.time, 0) / newResponseTimes.length)
+           : 0;
+
+        return {
+          ...prev,
+          responseTimes: newResponseTimes,
+          slowestApis,
+          incidents: newIncidents,
+          failingMonitors: newFailing,
+          avgResponse
+        };
+      });
+    };
+
+    socket.on('monitorUpdate', handleMonitorUpdate);
+
+    return () => {
+      clearInterval(interval);
+      socket.off('monitorUpdate', handleMonitorUpdate);
+    };
+  }, [socket]);
 
   useEffect(() => {
     const handleFocusRefetch = () => fetchMonitor();
@@ -299,7 +381,7 @@ const Analytics = () => {
                   ))}
                 </div>
               </div>
-              <div className="h-[280px] w-full">
+              <div className="h-70 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={mockStats.uptimeTrend}>
                     <defs>
@@ -351,7 +433,7 @@ const Analytics = () => {
                 <h3 className="text-lg font-semibold text-white">Response Times Comparison</h3>
                 <p className="text-sm text-zinc-500">Average latency across monitors</p>
               </div>
-              <div className="h-[250px] w-full">
+              <div className="h-62.5 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={mockStats.responseTimes.slice(0, 10)} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
@@ -413,7 +495,7 @@ const Analytics = () => {
                 <tbody className="divide-y divide-white/5">
                   {mockStats.incidents.length > 0 ? mockStats.incidents.map((incident, i) => (
                     <tr key={i} className="hover:bg-white/2 transition-colors group">
-                      <td className="px-4 py-4 font-medium text-zinc-200 max-w-[200px] truncate" title={incident.monitorName}>{incident.monitorName}</td>
+                      <td className="px-4 py-4 font-medium text-zinc-200 max-w-50 truncate" title={incident.monitorName}>{incident.monitorName}</td>
                       <td className="px-4 py-4">
                         <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${
                           incident.status === 'DOWN' ? 'bg-red-500/10 text-red-400 border border-red-500/20' : 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20'

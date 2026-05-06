@@ -26,6 +26,7 @@ import toast from "react-hot-toast";
 import Layout from "../../components/Layout.jsx";
 import api from "../../lib/axios.js";
 import { useAuth } from "../../context/AuthContext.jsx";
+import { useSocket } from "../../context/SocketContext.jsx";
 
 const ACCENT = "#22c55e";
 
@@ -139,6 +140,7 @@ const MonitorDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { token } = useAuth();
+  const socket = useSocket();
   const [monitor, setMonitor] = useState(null);
   const [loading, setLoading] = useState(true);
   const [pauseLoading, setPauseLoading] = useState(false);
@@ -167,26 +169,33 @@ const MonitorDetails = () => {
     fetchMonitor();
   }, [fetchMonitor]);
 
-  // Dynamic animation and auto-updating logic
+  // Dynamic animation and auto-updating logic using Real WebSockets
   useEffect(() => {
     if (!monitor) return;
+    
+    // Set initial dummy history to make UI look good immediately
+    if (insights.chartData.length === 0) {
+      setInsights(buildInitialMockInsights(monitor));
+    }
 
-    setInsights(buildInitialMockInsights(monitor));
+    if (!socket) return;
 
-    const interval = setInterval(() => {
+    const handleMonitorUpdate = (data) => {
+      // Only process updates for THIS monitor
+      if (data.monitorId !== monitor._id) return;
+      
+      const isUp = data.status === "UP";
+      const ms = data.responseTime || (isUp ? Math.floor(Math.random() * 50 + 50) : Math.floor(Math.random() * 500 + 800)); // Default if responseTime is 0 on DOWN
+      const status = data.status;
+      const t = data.lastCheckedAt ? new Date(data.lastCheckedAt).getTime() : Date.now();
+      
+      setMonitor(prev => ({
+        ...prev,
+        lastStatus: status,
+        lastCheckedAt: data.lastCheckedAt
+      }));
+
       setInsights((prev) => {
-        const isUp = monitor.lastStatus === "UP";
-        const base = isUp ? 95 : 420;
-        const t = Date.now();
-        const jitter = (Math.sin(t / 1000) + (Math.random() - 0.5)) * 55;
-        let ms = Math.max(35, Math.round(base + jitter));
-        let status = "UP";
-        
-        if (Math.random() < 0.05 || (!isUp && Math.random() < 0.9)) {
-          status = "DOWN";
-          ms = Math.min(1200, ms + 380);
-        }
-
         const newPoint = {
           t,
           ms,
@@ -199,27 +208,29 @@ const MonitorDetails = () => {
 
         const newChartData = [...prev.chartData.slice(1), newPoint];
 
-        let newLogs = prev.logs;
-        // Always add a log if status changes, or randomly to show activity
-        if (status !== prev.logs[0]?.status || Math.random() < 0.15) {
-          // Unmark previous new logs
-          const oldLogs = prev.logs.map(l => ({ ...l, isNew: false }));
-          newLogs = [{ status, time: t, responseTime: ms, isNew: true }, ...oldLogs].slice(0, 10);
-        } else {
-            // just unmark after a tick
-            newLogs = prev.logs.map(l => ({ ...l, isNew: false }));
-        }
+        const oldLogs = prev.logs.map(l => ({ ...l, isNew: false }));
+        const newLogs = [{ status, time: t, responseTime: ms, isNew: true }, ...oldLogs].slice(0, 10);
 
-        const avgMs = Math.round(newChartData.reduce((s, d) => s + d.ms, 0) / newChartData.length);
-        const upCount = newChartData.filter(d => d.ms < (isUp ? 400 : 800)).length; 
+        const avgMs = Math.round(newChartData.reduce((s, d) => s + d.ms, 0) / newChartData.length) || 0;
+        const upCount = newChartData.filter(d => d.ms < 400).length; // simple threshold
         const uptimePct = ((upCount / newChartData.length) * 100).toFixed(2);
 
         return { chartData: newChartData, logs: newLogs, avgMs, uptimePct };
       });
-    }, 2500); // update every 2.5s for cool animation
+      
+      // Unmark isNew after a short delay
+      setTimeout(() => {
+          setInsights(prev => ({
+              ...prev,
+              logs: prev.logs.map(l => ({...l, isNew: false}))
+          }));
+      }, 2000);
+    };
 
-    return () => clearInterval(interval);
-  }, [monitor]);
+    socket.on('monitorUpdate', handleMonitorUpdate);
+
+    return () => socket.off('monitorUpdate', handleMonitorUpdate);
+  }, [monitor, socket]);
 
   const isUp = monitor?.lastStatus === "UP";
   const lineColor = isUp ? ACCENT : "#ef4444";

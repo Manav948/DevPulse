@@ -1,6 +1,6 @@
 import Monitor from "../model/monitorModel.js";
 import axios from "axios"
-
+import { getIO } from "../server/socket.js";
 const WORKER_TICK_MS = 30 * 1000;
 
 const parseInterval = (interval) => {
@@ -67,6 +67,7 @@ export const createMonitor = async (req, res) => {
 }
 
 export const startMonitor = async () => {
+    
     setInterval(async () => {
         console.log("Running monitoring cycle");
         try {
@@ -92,12 +93,42 @@ export const startMonitor = async () => {
                         lastCheckedAt: new Date()
                     })
                     console.log(`${monitor.url} UP (${responseTime}ms)`);
+                    
+                    try {
+                        const io = getIO();
+                        io.emit("monitorUpdate", {
+                            monitorId: monitor._id,
+                            userId: monitor.userId,
+                            status: "UP",
+                            responseTime: responseTime,
+                            lastCheckedAt: new Date(),
+                            title: monitor.title,
+                            url: monitor.url
+                        });
+                    } catch (err) {
+                        console.log("Socket emit error:", err.message);
+                    }
                 } catch (error) {
                     await Monitor.findByIdAndUpdate(monitor._id, {
                         lastStatus: "DOWN",
                         lastCheckedAt: new Date()
                     })
                     console.log(`${monitor.url} DOWN`);
+                    
+                    try {
+                        const io = getIO();
+                        io.emit("monitorUpdate", {
+                            monitorId: monitor._id,
+                            userId: monitor.userId,
+                            status: "DOWN",
+                            responseTime: 0,
+                            lastCheckedAt: new Date(),
+                            title: monitor.title,
+                            url: monitor.url
+                        });
+                    } catch (err) {
+                        console.log("Socket emit error:", err.message);
+                    }
                 }
             }
         } catch (error) {

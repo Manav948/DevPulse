@@ -9,6 +9,8 @@ import { startMonitor } from "./controller/MonitorController.js";
 import settigsRouter from "./routes/profile.js";
 import path from "path";
 import { fileURLToPath } from "url";
+import http from "http";
+import { initSocket } from "./server/socket.js";
 
 dotenv.config();
 const app = express()
@@ -54,12 +56,15 @@ app.get("/", (req, res) => {
     res.send("Welcome to DevPulse API");
 })
 
-startMonitor();
 
 connectDB().then(() => {
-    app.listen(PORT, () => {
-        console.log(`The server is running on port : ${PORT}`)
-    })
+    const server = http.createServer(app);
+    initSocket(server);
+    startMonitor();
+    server.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+    });
+    
 }).catch((error) => {
     console.error('Failed to connect to database:', error);
 })

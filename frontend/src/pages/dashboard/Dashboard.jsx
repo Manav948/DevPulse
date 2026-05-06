@@ -3,6 +3,7 @@ import api from "../../lib/axios.js";
 import Layout from "../../components/Layout.jsx";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext.jsx";
+import { useSocket } from "../../context/SocketContext.jsx";
 import {
   Server,
   Activity,
@@ -21,9 +22,10 @@ const Dashboard = () => {
   const [monitors, setMonitors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [terminalLogs, setTerminalLogs] = useState([]);
-  const [showLogs, setShowLogs] = useState(false);
+  const [showLogs, setShowLogs] = useState(true);
   const terminalContainerRef = useRef(null);
   const { token, user } = useAuth();
+  const socket = useSocket();
   const navigate = useNavigate();
 
   const fetchMonitor = useCallback(async () => {
@@ -46,37 +48,49 @@ const Dashboard = () => {
     return () => window.removeEventListener("focus", handleFocus);
   }, [fetchMonitor]);
 
-  // Simulated Live Terminal Logs
+  // Real Live Terminal Logs from WebSocket
   useEffect(() => {
-    if (monitors.length === 0) return;
+    if (!socket) return;
     
-    // Initial logs
+    // Initial logs when socket connects
     setTerminalLogs([
-      { id: 1, text: `System initialized for ${user?.name || 'User'}.`, type: 'info', time: new Date() },
-      { id: 2, text: `Discovered ${monitors.length} endpoints. Commencing telemetry...`, type: 'info', time: new Date() }
+      { id: Date.now(), text: `System initialized for ${user?.name || 'User'}. Awaiting live telemetry...`, type: 'info', time: new Date() }
     ]);
 
-    const interval = setInterval(() => {
+    const handleMonitorUpdate = (data) => {
+      const isUp = data.status === 'UP';
+      
+      // Update monitors array
+      setMonitors(prev => prev.map(m => {
+        if (m._id === data.monitorId) {
+          return { ...m, lastStatus: data.status, lastCheckedAt: data.lastCheckedAt };
+        }
+        return m;
+      }));
+
+      // Update terminal logs
       setTerminalLogs(prev => {
-        const randomMonitor = monitors[Math.floor(Math.random() * monitors.length)];
-        const isUp = randomMonitor?.lastStatus !== 'DOWN';
-        
+        const title = data.title || data.url || 'Endpoint';
         const newLog = {
-          id: Date.now(),
+          id: Date.now() + Math.random(),
           text: isUp 
-            ? `PING ${randomMonitor?.title || 'Endpoint'} - OK (${Math.floor(Math.random() * 120 + 20)}ms)` 
-            : `PING ${randomMonitor?.title || 'Endpoint'} - TIMEOUT / ERROR`,
+            ? `PING ${title} - OK (${data.responseTime}ms)` 
+            : `PING ${title} - TIMEOUT / ERROR`,
           type: isUp ? 'success' : 'error',
           time: new Date()
         };
         
-        // Keep last 20 logs
-        return [...prev, newLog].slice(-20);
+        // Keep last 40 logs
+        return [...prev, newLog].slice(-40);
       });
-    }, 2500);
+    };
 
-    return () => clearInterval(interval);
-  }, [monitors, user]);
+    socket.on('monitorUpdate', handleMonitorUpdate);
+
+    return () => {
+      socket.off('monitorUpdate', handleMonitorUpdate);
+    };
+  }, [socket, user]);
 
   // Auto-scroll terminal without shifting the entire page
   useEffect(() => {
