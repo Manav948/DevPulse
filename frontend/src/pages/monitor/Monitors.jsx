@@ -119,9 +119,86 @@ const Monitors = () => {
             </button>
           </div>
 
-          <div className="rounded-xl border border-white/10 bg-white/2 backdrop-blur-md shadow-xl overflow-hidden">
+          <div className="space-y-4 md:hidden">
+            {loading ? (
+              <div className="rounded-xl border border-white/10 bg-white/2 px-5 py-10 text-center text-zinc-500 animate-pulse">
+                Loading monitors...
+              </div>
+            ) : monitors.length === 0 ? (
+              <div className="rounded-xl border border-white/10 bg-white/2 px-5 py-10 text-center text-zinc-500">
+                No monitors found. Create one to get started!
+              </div>
+            ) : (
+              monitors.map((monitor) => (
+                <article
+                  key={monitor._id}
+                  className="rounded-xl border border-white/10 bg-white/2 p-4 backdrop-blur-md"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex min-w-0 items-start gap-3">
+                      <div className={`mt-0.5 rounded-lg p-2 ${monitor.lastStatus === "UP" ? "bg-green-500/10 text-green-400" : "bg-red-500/10 text-red-400"}`}>
+                        <Activity className="h-4 w-4" />
+                      </div>
+                      <div className="min-w-0">
+                        <Link
+                          to={`/monitor/${monitor._id}`}
+                          className="block text-sm font-semibold text-white transition-colors hover:text-green-400 wrap-break-word line-clamp-2"
+                          title={monitor.title}
+                        >
+                          {monitor.title}
+                        </Link>
+                        <p className="mt-1 break-all text-xs text-zinc-400 line-clamp-2" title={monitor.url}>
+                          {monitor.url}
+                        </p>
+                      </div>
+                    </div>
+                    <StatusBadge status={monitor.lastStatus} />
+                  </div>
+
+                  <div className="mt-4 flex items-center gap-2 text-xs text-zinc-400">
+                    <Clock className="h-3.5 w-3.5 shrink-0" />
+                    <span className="truncate">
+                      {monitor.lastCheckedAt
+                        ? new Date(monitor.lastCheckedAt).toLocaleString()
+                        : "Pending"}
+                    </span>
+                  </div>
+
+                  <div className="mt-4 flex items-center justify-between gap-2">
+                    <a
+                      href={monitor.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1.5 rounded-md border border-white/10 bg-white/5 px-3 py-2 text-xs text-zinc-300 transition hover:bg-white/10"
+                    >
+                      Open URL
+                      <ExternalLink className="h-3.5 w-3.5" />
+                    </a>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => navigate(`/update/${monitor._id}`)}
+                        className="rounded-md bg-white/5 p-2 text-zinc-300 transition hover:bg-white/10 hover:text-white"
+                        title="Edit"
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(monitor._id)}
+                        className="rounded-md bg-red-500/10 p-2 text-red-400 transition hover:bg-red-500/20"
+                        title="Delete"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              ))
+            )}
+          </div>
+
+          <div className="hidden overflow-hidden rounded-xl border border-white/10 bg-white/2 backdrop-blur-md shadow-xl md:block">
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm text-zinc-300 min-w-full md:min-w-200">
+              <table className="w-full text-left text-sm text-zinc-300 min-w-full">
                 <thead className="bg-white/5 text-xs uppercase tracking-wider text-zinc-400 border-b border-white/10">
                   <tr>
                     <th scope="col" className="px-6 py-4 font-medium">Monitor Name</th>

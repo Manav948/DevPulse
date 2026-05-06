@@ -208,7 +208,7 @@ const Analytics = () => {
   return (
     <Layout>
       <div className="min-h-full bg-black text-white selection:bg-green-500/30 font-sans">
-        <div className="max-w-7xl mx-auto px-4 py-6 md:py-8 animate-in fade-in duration-700">
+        <div className="max-w-7xl mx-auto px-4 py-6 md:py-8">
           
           <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
             <div>
@@ -225,7 +225,7 @@ const Analytics = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
-            <div className="group rounded-2xl border border-white/5 bg-white/[0.01] backdrop-blur-xl p-5 hover:bg-white/[0.02] hover:border-white/10 hover:shadow-[0_0_30px_-5px_rgba(34,197,94,0.15)] transition-all duration-300">
+            <div className="group rounded-2xl border border-white/5 bg-white/1 backdrop-blur-xl p-5 hover:bg-white/2 hover:border-white/10 hover:shadow-[0_0_30px_-5px_rgba(34,197,94,0.15)] transition-all duration-300">
               <div className="flex justify-between items-start mb-4">
                 <div className="p-2.5 bg-zinc-800/50 text-zinc-400 rounded-xl group-hover:text-white transition-colors">
                   <Server className="h-5 w-5" />
@@ -235,7 +235,7 @@ const Analytics = () => {
               <p className="text-3xl font-bold text-white tracking-tight">{monitors.length}</p>
             </div>
 
-            <div className="group rounded-2xl border border-white/5 bg-white/[0.01] backdrop-blur-xl p-5 hover:bg-white/[0.02] hover:border-white/10 hover:shadow-[0_0_30px_-5px_rgba(34,197,94,0.15)] transition-all duration-300">
+            <div className="group rounded-2xl border border-white/5 bg-white/1 backdrop-blur-xl p-5 hover:bg-white/2 hover:border-white/10 hover:shadow-[0_0_30px_-5px_rgba(34,197,94,0.15)] transition-all duration-300">
               <div className="flex justify-between items-start mb-4">
                 <div className="p-2.5 bg-green-500/10 text-green-400 rounded-xl">
                   <CheckCircle2 className="h-5 w-5" />
@@ -245,7 +245,7 @@ const Analytics = () => {
               <p className="text-3xl font-bold text-white tracking-tight">{upCount}</p>
             </div>
 
-            <div className="group rounded-2xl border border-white/5 bg-white/[0.01] backdrop-blur-xl p-5 hover:bg-white/[0.02] hover:border-white/10 hover:shadow-[0_0_30px_-5px_rgba(239,68,68,0.15)] transition-all duration-300">
+            <div className="group rounded-2xl border border-white/5 bg-white/1 backdrop-blur-xl p-5 hover:bg-white/2 hover:border-white/10 hover:shadow-[0_0_30px_-5px_rgba(239,68,68,0.15)] transition-all duration-300">
               <div className="flex justify-between items-start mb-4">
                 <div className="p-2.5 bg-red-500/10 text-red-400 rounded-xl">
                   <AlertTriangle className="h-5 w-5" />
@@ -255,7 +255,7 @@ const Analytics = () => {
               <p className="text-3xl font-bold text-white tracking-tight">{downCount}</p>
             </div>
 
-            <div className="group rounded-2xl border border-white/5 bg-white/[0.01] backdrop-blur-xl p-5 hover:bg-white/[0.02] hover:border-white/10 hover:shadow-[0_0_30px_-5px_rgba(34,197,94,0.15)] transition-all duration-300">
+            <div className="group rounded-2xl border border-white/5 bg-white/1 backdrop-blur-xl p-5 hover:bg-white/2 hover:border-white/10 hover:shadow-[0_0_30px_-5px_rgba(34,197,94,0.15)] transition-all duration-300">
               <div className="flex justify-between items-start mb-4">
                 <div className="p-2.5 bg-blue-500/10 text-blue-400 rounded-xl group-hover:text-blue-300 transition-colors">
                   <Activity className="h-5 w-5" />
@@ -269,7 +269,7 @@ const Analytics = () => {
               <p className="text-3xl font-bold text-white tracking-tight">{mockStats.globalUptime.toFixed(2)}%</p>
             </div>
 
-            <div className="group rounded-2xl border border-white/5 bg-white/[0.01] backdrop-blur-xl p-5 hover:bg-white/[0.02] hover:border-white/10 hover:shadow-[0_0_30px_-5px_rgba(168,85,247,0.15)] transition-all duration-300">
+            <div className="group rounded-2xl border border-white/5 bg-white/1 backdrop-blur-xl p-5 hover:bg-white/2 hover:border-white/10 hover:shadow-[0_0_30px_-5px_rgba(168,85,247,0.15)] transition-all duration-300">
               <div className="flex justify-between items-start mb-4">
                 <div className="p-2.5 bg-purple-500/10 text-purple-400 rounded-xl group-hover:text-purple-300 transition-colors">
                   <Zap className="h-5 w-5" />
@@ -285,7 +285,7 @@ const Analytics = () => {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-            <div className="lg:col-span-2 rounded-2xl border border-white/5 bg-white/[0.01] backdrop-blur-xl p-6 shadow-lg">
+            <div className="lg:col-span-2 rounded-2xl border border-white/5 bg-white/1 backdrop-blur-xl p-6 shadow-lg">
               <div className="flex items-center justify-between mb-6">
                 <div>
                   <h3 className="text-lg font-semibold text-white">Uptime Trend</h3>
@@ -318,14 +318,14 @@ const Analytics = () => {
               </div>
             </div>
 
-            <div className="rounded-2xl border border-white/5 bg-white/[0.01] backdrop-blur-xl p-6 shadow-lg flex flex-col">
+            <div className="rounded-2xl border border-white/5 bg-white/1 backdrop-blur-xl p-6 shadow-lg flex flex-col">
               <div className="mb-6">
                 <h3 className="text-lg font-semibold text-white">Slowest Endpoints</h3>
                 <p className="text-sm text-zinc-500">APIs needing optimization</p>
               </div>
               <div className="flex-1 flex flex-col gap-3">
                 {mockStats.slowestApis.length > 0 ? mockStats.slowestApis.map((api, i) => (
-                  <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.04] transition-colors">
+                  <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-white/2 border border-white/5 hover:bg-white/4 transition-colors">
                     <div className="flex items-center gap-3 overflow-hidden">
                       <div className={`p-2 rounded-lg ${api.time > 500 ? 'bg-red-500/10 text-red-400' : 'bg-yellow-500/10 text-yellow-400'}`}>
                         <Clock className="h-4 w-4" />
@@ -346,7 +346,7 @@ const Analytics = () => {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            <div className="rounded-2xl border border-white/5 bg-white/[0.01] backdrop-blur-xl p-6 shadow-lg">
+            <div className="rounded-2xl border border-white/5 bg-white/1 backdrop-blur-xl p-6 shadow-lg">
               <div className="mb-6">
                 <h3 className="text-lg font-semibold text-white">Response Times Comparison</h3>
                 <p className="text-sm text-zinc-500">Average latency across monitors</p>
@@ -368,14 +368,14 @@ const Analytics = () => {
               </div>
             </div>
 
-            <div className="rounded-2xl border border-white/5 bg-white/[0.01] backdrop-blur-xl p-6 shadow-lg flex flex-col">
+            <div className="rounded-2xl border border-white/5 bg-white/1 backdrop-blur-xl p-6 shadow-lg flex flex-col">
               <div className="mb-6">
                 <h3 className="text-lg font-semibold text-white">High Failure Rate</h3>
                 <p className="text-sm text-zinc-500">Monitors with the most downtime events</p>
               </div>
               <div className="flex-1 flex flex-col gap-3">
                 {mockStats.failingMonitors.length > 0 ? mockStats.failingMonitors.map((m, i) => (
-                  <div key={i} className="flex items-center justify-between p-4 rounded-xl bg-red-500/[0.02] border border-red-500/10 hover:bg-red-500/[0.05] transition-colors">
+                  <div key={i} className="flex items-center justify-between p-4 rounded-xl bg-red-500/2 border border-red-500/10 hover:bg-red-500/5 transition-colors">
                     <div className="overflow-hidden pr-3">
                       <h4 className="font-medium text-sm text-zinc-200 mb-1 truncate" title={m.name}>{m.name}</h4>
                       <p className="text-xs text-zinc-500">Last: {m.lastFailure.toLocaleString()}</p>
@@ -395,14 +395,14 @@ const Analytics = () => {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-white/5 bg-white/[0.01] backdrop-blur-xl p-6 shadow-lg overflow-hidden">
+          <div className="rounded-2xl border border-white/5 bg-white/1 backdrop-blur-xl p-6 shadow-lg overflow-hidden">
             <div className="mb-6">
               <h3 className="text-lg font-semibold text-white">Recent Incidents</h3>
               <p className="text-sm text-zinc-500">Log of recent downtime or performance issues</p>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm text-zinc-400">
-                <thead className="bg-white/[0.03] text-xs uppercase text-zinc-500">
+                <thead className="bg-white/3 text-xs uppercase text-zinc-500">
                   <tr>
                     <th className="px-4 py-3 font-medium rounded-l-lg">Monitor</th>
                     <th className="px-4 py-3 font-medium">Status</th>
@@ -412,7 +412,7 @@ const Analytics = () => {
                 </thead>
                 <tbody className="divide-y divide-white/5">
                   {mockStats.incidents.length > 0 ? mockStats.incidents.map((incident, i) => (
-                    <tr key={i} className="hover:bg-white/[0.02] transition-colors group">
+                    <tr key={i} className="hover:bg-white/2 transition-colors group">
                       <td className="px-4 py-4 font-medium text-zinc-200 max-w-[200px] truncate" title={incident.monitorName}>{incident.monitorName}</td>
                       <td className="px-4 py-4">
                         <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${
