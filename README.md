@@ -68,20 +68,24 @@ It continuously monitors user-provided URLs, stores monitoring logs, analyzes up
 9. Users can view uptime analytics and monitor performance.
 
     
-## ▶️ Run Project Locally 
+## Run Project Locally 
 
 ### Backend
-
+```
 cd Backend
-npm install
-npm run dev
 
+npm install
+
+npm run dev
+```
 ### Frontend
-
+```
 cd Frontend
-npm install
-npm run dev
 
+npm install
+
+npm run dev
+```
 # Real-Time Architecture
 
 DevPulse uses WebSockets to provide real-time monitor updates.
@@ -97,7 +101,7 @@ MongoDB + HTTP Checks
 This allows monitor status changes to instantly appear on the frontend without requiring a page refresh.
 
 
-# 🔑 Environment Variables
+# Environment Variables
 
 Create a `.env` file in the server directory:
 
