@@ -1,67 +1,107 @@
-# DevPulse — API Monitoring Platform
-DevPulse is a real-time API and website monitoring platform that helps developers track uptime, response time, failures, and performance of their APIs and services.
-It continuously monitors user-provided URLs, records status and response time, and displays analytics through a modern dashboard.
+# DevPulse — Real-Time API Monitoring Platform
+
+DevPulse is a modern real-time API and website monitoring platform that helps developers track uptime, response time, failures, and performance of their services.
+It continuously monitors user-provided URLs, stores monitoring logs, analyzes uptime data, and provides live analytics through a modern SaaS-style dashboard.
+
+## Features
+
+### Authentication
+- JWT Authentication
+- Google OAuth Login
+- GitHub OAuth Login
+
+### Monitoring System
+- API & Website Monitoring
+- Background Monitoring Worker
+- Status Detection (UP / DOWN)
+- Response Time Tracking
+- Real-time Status Updates
+- Monitor Management (Create / Update / Delete)
+
+### Dashboard & Analytics
+- Monitoring Dashboard
+- Live Response Graphs
+- Uptime Statistics
+- Analytics Overview
+- Real-time UI Updates
+- Monitor Details Page
+
+###  User Features
+- Profile Management
+- Profile Image Upload
+- Settings Page
 
 
-## 🚀 Features
+# Tech Stack
+## Frontend
+- React.js
+- Tailwind CSS
+- GSAP
+- Recharts
+- Axios
+- React Router DOM
+- Socket.io Client
 
-* 🔐 JWT Authentication (Email & Password)
-* 🔑 OAuth Login (Google & GitHub)
-* 🌐 API & Website Monitoring
-* ⏱ Response Time Tracking
-* 📉 Status Monitoring (UP / DOWN)
-* 📊 Dashboard with Monitoring Cards
-* 📈 Live Graph Visualization
-* 👤 User Profile with Image Upload
-* 🗑 Delete Monitor
-* 🧭 Modern Landing Page UI
-* ⚡ Background Monitoring Worker
+## Backend
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- JWT Authentication
+- OAuth (Google & GitHub)
+- Socket.io
+- Axios
 
+# How Monitoring Works
 
-## 🛠 Tech Stack
+1. User signs up or logs in.
+2. User creates a monitor by submitting a URL.
+3. The monitor is stored in MongoDB.
+4. A background worker continuously checks active monitors.
+5. The server sends HTTP requests to monitored URLs.
+6. The system records:
+   - Monitor Status
+   - Response Time
+   - Last Checked Time
+7. Monitoring logs are stored for analytics and history.
+8. WebSocket events push real-time updates to the dashboard.
+9. Users can view uptime analytics and monitor performance.
+
+    
+## ▶️ Run Project Locally ### Backend
+cd Backend
+npm install
+npm run dev
 
 ### Frontend
-* React
-* Tailwind CSS
-* GSAP (Animations)
-* Recharts (Graphs)
-* Axios
-* React Router
+cd Frontend
+npm install
+npm run dev
 
-### Backend
-* Node.js
-* Express.js
-* MongoDB
-* Mongoose
-* JWT Authentication
-* OAuth (Google & GitHub)
-* Axios (Monitoring Requests)
+# Real-Time Architecture
 
----
+DevPulse uses WebSockets to provide real-time monitor updates.
+Flow:
 
-## ⚙️ How Monitoring Works
+User Dashboard
+⬆
+WebSocket Events
+⬆
+Monitoring Worker
+⬆
+MongoDB + HTTP Checks
+This allows monitor status changes to instantly appear on the frontend without requiring a page refresh.
 
-1. User signs up / logs in.
-2. User adds a URL to monitor.
-3. The backend saves the monitor in MongoDB.
-4. A background worker runs every 60 seconds.
-5. The server sends a GET request to the URL.
-6. The system records:
 
-   * Status (UP / DOWN)
-   * Response Time
-   * Last Checked Time
-7. Dashboard displays monitoring data and graphs.
+# 🔑 Environment Variables
 
----
+Create a `.env` file in the server directory:
 
-## 🔑 Environment Variables
-
-Create a `.env` file in server folder:
-
-```
+```env
 PORT=3000
+
 MONGO_URI=your_mongodb_uri
+
 JWT_SECRET=your_jwt_secret
 
 GOOGLE_CLIENT_ID=your_google_client_id
@@ -69,44 +109,3 @@ GITHUB_CLIENT_ID=your_github_client_id
 
 UPLOADTHING_SECRET=your_uploadthing_secret
 UPLOADTHING_APP_ID=your_uploadthing_app_id
-```
-
----
-
-## ▶️ Run Project Locally
-
-### Backend
-
-```
-cd Backend
-npm install
-npm run dev
-```
-
-### Frontend
-
-```
-cd Frontend
-npm install
-npm run dev
-```
-
-
-## 📊 Future Improvements
-
-* Email Notifications when API goes down
-* Webhook Alerts
-* Public Status Pages
-* Team Workspaces
-* Monitor Logs History
-* Response Time Analytics Graph
-* Global Monitoring Nodes
-* Docker Deployment
-
-
-Full Stack Developer
-MERN Stack | Next.js | TypeScript | Backend Systems
-
-## ⭐ Project Goal
-
-The goal of DevPulse is to build a production-level SaaS monitoring platform where developers can monitor their APIs and websites in real-time and receive insights about uptime and performance.
