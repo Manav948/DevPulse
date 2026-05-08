@@ -26,6 +26,8 @@ export const SocketProvider = ({ children }) => {
         // Initialize socket
         const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
         const newSocket = io(backendUrl, {
+            transports: ['websocket', 'polling'],
+            withCredentials: true
             // You can pass auth token if needed
             // auth: { token }
         });

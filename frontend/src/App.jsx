@@ -24,7 +24,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<PublicOnlyRoute><Home /></PublicOnlyRoute>} />
 
         {/* Auth pages — redirect to dashboard if already signed in */}
         <Route path="/signup" element={<PublicOnlyRoute><SignUp /></PublicOnlyRoute>} />

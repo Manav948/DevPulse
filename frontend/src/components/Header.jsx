@@ -144,7 +144,7 @@ const MarketingHeader = () => {
           </div>
         </div>
 
-        <div className="relative flex items-center gap-4" ref={dropdownRef}>
+        <div className="relative flex items-center gap-2 sm:gap-4" ref={dropdownRef}>
           {user ? (
             <>
               <button
@@ -192,14 +192,14 @@ const MarketingHeader = () => {
               <button
                 type="button"
                 onClick={() => navigate("/signin")}
-                className="rounded-lg border border-green-500/30 px-4 py-2 text-sm text-green-400 transition hover:bg-green-500/10"
+                className="rounded-lg border border-green-500/30 px-3 py-1.5 text-xs sm:px-4 sm:py-2 sm:text-sm text-green-400 transition hover:bg-green-500/10"
               >
                 Sign In
               </button>
               <button
                 type="button"
                 onClick={() => navigate("/signup")}
-                className="rounded-lg bg-linear-to-r from-green-400 to-emerald-500 px-4 py-2 text-sm font-semibold text-black transition hover:opacity-90"
+                className="rounded-lg bg-linear-to-r from-green-400 to-emerald-500 px-3 py-1.5 text-xs sm:px-4 sm:py-2 sm:text-sm font-semibold text-black transition hover:opacity-90"
               >
                 Sign Up
               </button>

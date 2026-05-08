@@ -135,7 +135,7 @@ const SignIn = () => {
           </span>
         </div>
 
-        <div className="flex gap-4 mb-6 z-10 relative">
+        <div className="flex flex-col sm:flex-row gap-4 mb-6 z-10 relative">
           <div className="flex-1">
             <GoogleLogin
               onSuccess={async (credentialResponse) => {

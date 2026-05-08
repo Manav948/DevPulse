@@ -125,7 +125,7 @@ const SignUp = () => {
           </span>
         </div>
 
-        <div className="flex gap-4 mb-6 relative z-10">
+        <div className="flex flex-col sm:flex-row gap-4 mb-6 relative z-10">
 
           <div className="flex-1">
             <GoogleLogin
