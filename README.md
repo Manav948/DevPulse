@@ -68,12 +68,16 @@ It continuously monitors user-provided URLs, stores monitoring logs, analyzes up
 9. Users can view uptime analytics and monitor performance.
 
     
-## ▶️ Run Project Locally ### Backend
+## ▶️ Run Project Locally 
+
+### Backend
+
 cd Backend
 npm install
 npm run dev
 
 ### Frontend
+
 cd Frontend
 npm install
 npm run dev
