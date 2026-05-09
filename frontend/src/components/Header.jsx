@@ -28,7 +28,7 @@ const AppHeader = () => {
   }, []);
 
   return (
-    <header className="hidden w-full shrink-0 border-b border-white/10 bg-black/40 px-4 py-3 backdrop-blur-md md:flex md:justify-end md:px-6">
+    <header className="relative z-50 hidden w-full shrink-0 border-b border-white/10 bg-black/40 px-4 py-3 backdrop-blur-md md:flex md:justify-end md:px-6">
       <div className="relative flex items-center gap-3" ref={dropdownRef}>
         {user ? (
           <>
